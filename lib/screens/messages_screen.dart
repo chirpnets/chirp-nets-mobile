@@ -35,7 +35,7 @@ class MessagesScreen extends StatelessWidget {
               messageObject.createdAt,
             ));
 
-    textController.text = '';
+    textController.clear();
   }
 
   @override
@@ -80,12 +80,17 @@ class MessagesScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: TextField(
+                    textCapitalization: TextCapitalization.sentences,
                     decoration: InputDecoration(
                       hasFloatingPlaceholder: true,
                       hintText: 'Say something nice...',
                     ),
                     onSubmitted: (String message) => sendMessage(
-                        message, conversation.id, user, messageData),
+                      message,
+                      conversation.id,
+                      user,
+                      messageData,
+                    ),
                     controller: textController,
                   ),
                 ),
