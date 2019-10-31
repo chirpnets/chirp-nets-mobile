@@ -7,6 +7,12 @@ class Messages with ChangeNotifier {
     getMessagesFromConversation();
   }
 
+  Map<int, Message> _messages = {};
+
+  Map<int, Message> get messages {
+    return {..._messages};
+  }
+
   void getMessagesFromConversation({int conversationId = 0}) async {
     List<Message> messages;
     if (conversationId > 0) {
@@ -17,12 +23,6 @@ class Messages with ChangeNotifier {
     }
     _messages = {for (var message in messages) message.id: message};
     notifyListeners();
-  }
-
-  Map<int, Message> _messages = {};
-
-  Map<int, Message> get messages {
-    return {..._messages};
   }
 
   void addMessage(int id, int createdBy, int conversationId, String message,

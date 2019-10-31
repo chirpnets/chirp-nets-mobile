@@ -7,6 +7,12 @@ class Users with ChangeNotifier {
     init();
   }
 
+  Map<int, User> _users = {};
+
+  Map<int, User> get users {
+    return {..._users};
+  }
+
   void init() async {
     List<User> users = await getUsers();
     for (User user in users) {
@@ -18,13 +24,9 @@ class Users with ChangeNotifier {
     notifyListeners();
   }
   
-  Map<int, User> _users = {};
 
-  Map<int, User> get users {
-    return {..._users};
-  }
 
-  void addMessage(int id, String name) {
+  void addUser(int id, String name) {
     _users.putIfAbsent(
       id,
       () => User(

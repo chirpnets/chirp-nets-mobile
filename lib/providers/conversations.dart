@@ -7,6 +7,12 @@ class Conversations with ChangeNotifier {
     init();
   }
 
+  Map<int, Conversation> _conversations = {};
+
+  Map<int, Conversation> get conversations {
+    return {..._conversations};
+  }
+
   void init() async {
     List<Conversation> conversations = await getConversations();
     for (Conversation conversation in conversations) {
@@ -16,12 +22,6 @@ class Conversations with ChangeNotifier {
       );
     }
     notifyListeners();
-  }
-
-  Map<int, Conversation> _conversations = {};
-
-  Map<int, Conversation> get conversations {
-    return {..._conversations};
   }
 
   set conversations(Map<int, Conversation> conversations) {

@@ -1,4 +1,3 @@
-
 import 'package:chirp_nets/models/model.dart';
 
 class User implements Model {

@@ -1,11 +1,10 @@
-import '../models/user.dart';
-import '../models/contact.dart';
-import '../models/conversation.dart';
-import '../models/message.dart';
-import '../models/device.dart';
+import 'package:chirp_nets/models/user.dart';
+import 'package:chirp_nets/models/conversation.dart';
+import 'package:chirp_nets/models/contact.dart';
+import 'package:chirp_nets/models/message.dart';
+import 'package:chirp_nets/models/device.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import 'dart:async';
 
 final List<String> migrations = [
   "CREATE TABLE users(id INTEGER PRIMARY KEY, name TEXT);",
@@ -49,7 +48,7 @@ final Future<Database> database = getDatabase();
 
 Future<int> create({String table, dynamic object}) async {
   final Database db = await database;
-  
+
   return await db.insert(
     table,
     object.toMap(),

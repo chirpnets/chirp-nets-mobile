@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:chirp_nets/providers/users.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
