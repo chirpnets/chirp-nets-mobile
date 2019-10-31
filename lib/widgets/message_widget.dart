@@ -15,7 +15,7 @@ class MessageWidget extends StatelessWidget {
         children: [
           Container(
             alignment: Alignment.topLeft,
-            width: 200,
+            width: 250,
             height: 60,
             margin: EdgeInsets.all(10),
             padding: EdgeInsets.only(

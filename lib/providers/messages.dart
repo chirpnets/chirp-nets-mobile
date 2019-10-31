@@ -39,4 +39,11 @@ class Messages with ChangeNotifier {
     );
     notifyListeners();
   }
+
+  List<Message> toList() {
+    List<Message> messages = [];
+    messages = {for (var id in _messages.keys) _messages[id]}.toList();
+    messages.sort((a, b) => -a.createdAt.compareTo(b.createdAt));
+    return messages;
+  }
 }
