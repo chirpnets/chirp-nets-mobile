@@ -31,7 +31,20 @@ class Conversations with ChangeNotifier {
 
   void deleteConversation(int id) {
     _conversations.removeWhere((convId, conversation) => id == convId);
-    delete(table:'conversations', id: id);
+    delete(table: 'conversations', id: id);
+    notifyListeners();
+  }
+
+  void updateConversation(int id, String name) {
+    _conversations.update(
+      id,
+      (conversation) => Conversation(
+        id: conversation.id,
+        name: name,
+        userId: conversation.userId,
+      ),
+    );
+    update(table: 'conversations', object: _conversations[id]);
     notifyListeners();
   }
 

@@ -27,8 +27,6 @@ Future<Database> getDatabase() async {
     },
     onUpgrade: (db, oldVersion, newVersion) async {
       var batch = db.batch();
-      print(oldVersion);
-      print(newVersion);
       for (var i = oldVersion - 1; i == newVersion - 1; i++) {
         batch.execute(migrations[i]);
       }

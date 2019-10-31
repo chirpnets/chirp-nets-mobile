@@ -1,10 +1,11 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+
 import 'package:chirp_nets/models/conversation.dart';
 import 'package:chirp_nets/models/user.dart';
 import 'package:chirp_nets/providers/conversations.dart';
 import 'package:chirp_nets/screens/messages_screen.dart';
-import 'package:chirp_nets/utils/database.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:chirp_nets/widgets/add_conversation_widget.dart';
 
 class ConversationWidget extends StatelessWidget {
   const ConversationWidget({this.conversation, this.user, this.conversations});
@@ -35,9 +36,21 @@ class ConversationWidget extends StatelessWidget {
       actions: <Widget>[
         IconSlideAction(
           icon: Icons.delete,
-          color: Colors.red,
+          color: Theme.of(context).errorColor,
           onTap: () => deleteConversation(conversation.id),
-        )
+        ),
+        IconSlideAction(
+          icon: Icons.edit,
+          color: Theme.of(context).buttonColor,
+          onTap: () => showModalBottomSheet(
+          context: context,
+          builder: (ctx) => AddConversationWidget(
+            conversationData: conversations,
+            user: user,
+            conversation: conversation,
+          ),
+        ),
+        ),
       ],
       child: Container(
         decoration: BoxDecoration(

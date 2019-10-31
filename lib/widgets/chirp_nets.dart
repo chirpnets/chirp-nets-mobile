@@ -26,9 +26,8 @@ class _ChirpNetsState extends State<ChirpNets> {
     List<User> users = await getUsers();
     if (users.length == 0) {
       User user = User(name: 'Tim');
-      await create(table: 'users', object: user).then((id) => {
-        user = User(id: id, name: 'Tim')
-      });
+      await create(table: 'users', object: user)
+          .then((id) => {user = User(id: id, name: 'Tim')});
       users = await getUsers();
     }
 
@@ -67,6 +66,8 @@ class _ChirpNetsState extends State<ChirpNets> {
         primarySwatch: Colors.orange,
         accentColor: Colors.orangeAccent,
         canvasColor: Color.fromRGBO(20, 51, 51, 1),
+        buttonColor: Colors.teal,
+        errorColor: Colors.red,
       ),
       home: MultiProvider(
         providers: [
