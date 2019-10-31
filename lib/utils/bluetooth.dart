@@ -1,12 +1,27 @@
 import 'package:flutter_blue/flutter_blue.dart';
-var device;
-FlutterBlue flutterBlue = FlutterBlue.instance;
-var scanSubscription = flutterBlue.scan().listen((scanResult) {
-    // do something with scan result
-    device = scanResult.device;
-    print('${device.name} found! rssi: ${scanResult.rssi}');
-});
+import 'package:chirp_nets/utils/database.dart';
+import 'package:chirp_nets/models/device.dart';
 
-void connectToDevice() async {
-  await device.connect();
+class Bluetooth {
+  var _device;
+  FlutterBlue _flutterBlue = FlutterBlue.instance;
+
+  void connectToDevice(userId, ) async {
+    var scanSubscription = _flutterBlue.scan().listen((scanResult) async {
+      // do something with scan result
+      _device = scanResult.device;
+      print('${_device.name} found! rssi: ${scanResult.rssi}');
+    });
+    scanSubscription.onDone(() async {
+      await _device.connect();
+      Device device = new Device(
+        id: 1,
+        name: _device.name,
+        userId: userId,
+      );
+
+      create(table: 'device', object: device);
+    });
+    scanSubscription.cancel();
+  }
 }

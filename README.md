@@ -1,4 +1,4 @@
-# mobile
+# Chirp Nets
 
 A new Flutter application.
 

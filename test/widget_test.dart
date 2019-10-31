@@ -8,7 +8,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:mobile/widgets/chirp_nets.dart';
+import 'package:chirp_nets/widgets/chirp_nets.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
