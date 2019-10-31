@@ -24,6 +24,7 @@ class ConversationsScreen extends StatelessWidget {
         child: ConversationsListWidget(
           currentUser: currentUser,
           conversations: conversations,
+          conversationData: conversationData,
         ),
       ),
       floatingActionButton: FloatingActionButton(

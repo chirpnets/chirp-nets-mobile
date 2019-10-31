@@ -45,7 +45,7 @@ class AddConversationWidget extends StatelessWidget {
             children: [
               TextField(
                 autofocus: true,
-                textCapitalization: TextCapitalization.sentences,
+                textCapitalization: TextCapitalization.words,
                 decoration: InputDecoration(
                   hasFloatingPlaceholder: true,
                   hintText: 'Enter Group Name...',
@@ -58,15 +58,20 @@ class AddConversationWidget extends StatelessWidget {
                 ),
                 controller: textController,
               ),
-              RaisedButton(
-                onPressed: () => addConversation(
-                  conversationData,
-                  user,
-                  textController.text,
-                  context
-                ),
-                child: Icon(
-                  Icons.add_comment
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 10),
+                child: RaisedButton(
+                  onPressed: () => addConversation(
+                    conversationData,
+                    user,
+                    textController.text,
+                    context
+                  ),
+                  color: Theme.of(context).canvasColor,
+                  child: Icon(
+                    Icons.add_comment,
+                    color: Theme.of(context).primaryColor,
+                  ),
                 ),
               )
             ],

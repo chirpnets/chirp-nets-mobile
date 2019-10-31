@@ -1,12 +1,16 @@
 import 'package:chirp_nets/models/conversation.dart';
 import 'package:chirp_nets/models/user.dart';
+import 'package:chirp_nets/providers/conversations.dart';
 import 'package:chirp_nets/screens/messages_screen.dart';
+import 'package:chirp_nets/utils/database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class ConversationWidget extends StatelessWidget {
-  const ConversationWidget({this.conversation, this.user});
+  const ConversationWidget({this.conversation, this.user, this.conversations});
 
   final Conversation conversation;
+  final Conversations conversations;
   final User user;
 
   void viewMessages(ctx) async {
@@ -19,27 +23,40 @@ class ConversationWidget extends StatelessWidget {
     );
   }
 
+  void deleteConversation(id) {
+    conversations.deleteConversation(id);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () => viewMessages(context),
-      splashColor: Theme.of(context).primaryColor,
-      borderRadius: BorderRadius.circular(15),
+    return Slidable(
+      actionExtentRatio: 0.15,
+      actionPane: SlidableDrawerActionPane(),
+      actions: <Widget>[
+        IconSlideAction(
+          icon: Icons.delete,
+          color: Colors.red,
+          onTap: () => deleteConversation(conversation.id),
+        )
+      ],
       child: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Theme.of(context).accentColor.withOpacity(0.7),
-              Theme.of(context).primaryColor,
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
           borderRadius: BorderRadius.circular(10),
+          color: Theme.of(context).primaryColor,
         ),
         margin: EdgeInsets.all(10),
-        padding: EdgeInsets.all(25),
-        child: Text(conversation.name),
+        padding: EdgeInsets.all(5),
+        child: ListTile(
+          onTap: () => viewMessages(context),
+          leading: CircleAvatar(
+            backgroundColor: Theme.of(context).canvasColor,
+            child: Icon(
+              Icons.person,
+              color: Theme.of(context).accentColor,
+            ),
+          ),
+          title: Text(conversation.name),
+        ),
       ),
     );
   }

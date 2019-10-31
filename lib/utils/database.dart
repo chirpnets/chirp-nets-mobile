@@ -67,7 +67,7 @@ Future<void> update({String table, dynamic object}) async {
   );
 }
 
-Future<void> delete({String table, String id}) async {
+Future<void> delete({String table, int id}) async {
   final Database db = await database;
   await db.delete(
     table,
