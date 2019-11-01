@@ -1,12 +1,11 @@
 import 'package:chirp_nets/models/user.dart';
 import 'package:chirp_nets/providers/users.dart';
+import 'package:chirp_nets/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:chirp_nets/screens/conversations_screen.dart';
 import 'package:chirp_nets/screens/messages_screen.dart';
-import 'package:chirp_nets/models/conversation.dart';
-import 'package:chirp_nets/models/device.dart';
 import 'package:chirp_nets/utils/database.dart';
 import 'package:chirp_nets/providers/messages.dart';
 import 'package:chirp_nets/providers/conversations.dart';
@@ -17,28 +16,12 @@ class ChirpNets extends StatefulWidget {
 }
 
 class _ChirpNetsState extends State<ChirpNets> {
-  List<User> users;
-  List<Conversation> conversations = [];
-  List<Device> devices;
   User currentUser;
 
   void setUp() async {
     List<User> users = await getUsers();
-    if (users.length == 0) {
-      User user = User(name: 'Tim');
-      await create(table: 'users', object: user)
-          .then((id) => {user = User(id: id, name: 'Tim')});
-      users = await getUsers();
-    }
-
-    List<Conversation> conversations = await getConversations();
-    List<Device> devices = await getDevices();
-
     setState(() {
-      this.currentUser = users[0];
-      this.users = users;
-      this.conversations = conversations;
-      this.devices = devices;
+      this.currentUser = users.firstWhere((user) => user.id == 1, orElse: () => null);
     });
   }
 
@@ -81,7 +64,9 @@ class _ChirpNetsState extends State<ChirpNets> {
             value: Messages(),
           ),
         ],
-        child: ConversationsScreen(),
+        child: ConversationsScreen(
+          addUser: currentUser == null,
+        ),
       ),
       routes: {
         MessagesScreen.routeName: (ctx) => MultiProvider(
@@ -95,6 +80,14 @@ class _ChirpNetsState extends State<ChirpNets> {
               ],
               child: MessagesScreen(),
             ),
+        SettingsScreen.routeName: (ctx) => MultiProvider(
+              providers: [
+                ChangeNotifierProvider.value(
+                  value: Users(),
+                ),
+              ],
+              child: SettingsScreen(),
+            )
       },
     );
   }

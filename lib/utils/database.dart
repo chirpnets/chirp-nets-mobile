@@ -1,6 +1,5 @@
 import 'package:chirp_nets/models/user.dart';
 import 'package:chirp_nets/models/conversation.dart';
-import 'package:chirp_nets/models/contact.dart';
 import 'package:chirp_nets/models/message.dart';
 import 'package:chirp_nets/models/device.dart';
 import 'package:path/path.dart';
@@ -8,13 +7,11 @@ import 'package:sqflite/sqflite.dart';
 
 final List<String> migrations = [
   "CREATE TABLE users(id INTEGER PRIMARY KEY, name TEXT);",
-  "CREATE TABLE device(id INTEGER PRIMARY KEY, userId INTEGER, deviceRSSI TEXT, FOREIGN KEY(userId) REFERENCES users(id));",
+  "CREATE TABLE devices(id INTEGER PRIMARY KEY, userId INTEGER, deviceRSSI TEXT, FOREIGN KEY(userId) REFERENCES users(id));",
   "CREATE TABLE conversations(id INTEGER PRIMARY KEY, userId INTEGER, name TEXT, FOREIGN KEY(userId) REFERENCES users(id));",
-  "CREATE TABLE messages(id INTEGER PRIMARY KEY, conversationId INTEGER, message TEXT, createdAt TEXT, FOREIGN KEY(conversationId) REFERENCES conversations(id));",
-  "CREATE TABLE contact(id INTEGER PRIMARY KEY, conversationId INTEGER, name TEXT, deviceId TEXT, FOREIGN KEY(conversationId) REFERENCES conversations(id));",
-  "ALTER TABLE device ADD COLUMN name;",
+  "CREATE TABLE messages(id INTEGER PRIMARY KEY, conversationId INTEGER, message TEXT, createdAt TEXT, FOREIGN KEY(conversationId) REFERENCES conversations(id) ON DELETE CASCADE);",
+  "ALTER TABLE devices ADD COLUMN name;",
   "ALTER TABLE messages ADD COLUMN createdBy INTEGER; ALTER TABLE messages add FOREIGN KEY(createdBy) REFERENCES users(id)",
-  "ALTER TABLE contact ADD COLUMN userId INTEGER; ALTER TABLE contact add FOREIGN KEY(userId) REFERENCES users(id)",
 ];
 
 Future<Database> getDatabase() async {
@@ -114,7 +111,7 @@ Future<List<Conversation>> getConversations({where, whereArgs}) async {
 Future<List<Device>> getDevices({where, whereArgs}) async {
   final Database db = await database;
 
-  final maps = await db.query('device', where: where, whereArgs: whereArgs);
+  final maps = await db.query('devices', where: where, whereArgs: whereArgs);
 
   if (maps == null) {
     return [];
@@ -149,20 +146,3 @@ Future<List<Message>> getMessages({where, whereArgs}) async {
   });
 }
 
-Future<List<Contact>> getContacts({where, whereArgs}) async {
-  final Database db = await database;
-
-  final maps = await db.query('contacts', where: where, whereArgs: whereArgs);
-
-  if (maps == null) {
-    return [];
-  }
-
-  return List.generate(maps.length, (i) {
-    return Contact(
-      id: maps[i]['id'],
-      conversationId: maps[i]['conversationId'],
-      name: maps[i]['name'],
-    );
-  });
-}

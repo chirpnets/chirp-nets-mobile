@@ -38,6 +38,6 @@ class Users with ChangeNotifier {
   }
 
   User getCurrentUser() {
-    return _users[1];
+    return _users.containsKey(1) ? _users[1] : null;
   }
 }

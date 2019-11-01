@@ -20,7 +20,7 @@ class Bluetooth {
         userId: userId,
       );
 
-      create(table: 'device', object: device);
+      create(table: 'devices', object: device);
     });
     scanSubscription.cancel();
   }

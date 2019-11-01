@@ -3,10 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:chirp_nets/utils/database.dart';
 
 class Messages with ChangeNotifier {
-  Messages() {
-    getMessagesFromConversation();
-  }
-
   Map<int, Message> _messages = {};
 
   Map<int, Message> get messages {
@@ -22,7 +18,6 @@ class Messages with ChangeNotifier {
       messages = await getMessages();
     }
     _messages = {for (var message in messages) message.id: message};
-    notifyListeners();
   }
 
   void addMessage(int id, int createdBy, int conversationId, String message,
@@ -40,7 +35,7 @@ class Messages with ChangeNotifier {
     notifyListeners();
   }
 
-  List<Message> toList() {
+  List<Message> getList() {
     List<Message> messages = [];
     messages = {for (var id in _messages.keys) _messages[id]}.toList();
     messages.sort((a, b) => -a.createdAt.compareTo(b.createdAt));
