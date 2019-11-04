@@ -1,5 +1,6 @@
 import 'package:chirp_nets/models/user.dart';
 import 'package:chirp_nets/providers/users.dart';
+import 'package:chirp_nets/screens/bluetooth_screen.dart';
 import 'package:chirp_nets/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +22,8 @@ class _ChirpNetsState extends State<ChirpNets> {
   void setUp() async {
     List<User> users = await getUsers();
     setState(() {
-      this.currentUser = users.firstWhere((user) => user.id == 1, orElse: () => null);
+      this.currentUser =
+          users.firstWhere((user) => user.id == 1, orElse: () => null);
     });
   }
 
@@ -87,6 +89,10 @@ class _ChirpNetsState extends State<ChirpNets> {
                 ),
               ],
               child: SettingsScreen(),
+            ),
+        BluetoothScreen.routeName: (ctx) => MultiProvider(
+              providers: [],
+              child: BluetoothScreen(),
             )
       },
     );

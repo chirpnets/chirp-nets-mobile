@@ -12,7 +12,6 @@ class AddFirstUserWidget extends StatelessWidget {
     create(table: 'users', object: user).then((id) {
       users.addUser(id, name);
       Conversation conv = Conversation(name: conversationName, userId: id);
-      print(conv);
       create(table: 'conversations', object: conv).then(
         (convId) => conversations.addConversation(convId, id, conversationName),
       );

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class SettingWidget extends StatelessWidget {
-  final String title;
-
-  SettingWidget({this.title});
+  final Widget child;
+  final options;
+  SettingWidget({this.child, this.options});
 
   @override
   Widget build(BuildContext context) {
@@ -11,9 +11,10 @@ class SettingWidget extends StatelessWidget {
       child: Card(
         color: Theme.of(context).accentColor,
         child: Container(
-          padding: EdgeInsets.all(10),
-          child: ListTile(
-          ),
+          width: MediaQuery.of(context).size.width * 0.8,
+          height: 70,
+          margin: EdgeInsets.all(10),
+          child: child,
         ),
       ),
     );

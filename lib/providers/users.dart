@@ -23,8 +23,15 @@ class Users with ChangeNotifier {
     }
     notifyListeners();
   }
-  
 
+  void updateUser(int id, String name) {
+    _users.update(
+      id,
+      (oldUser) => User(id: oldUser.id, name: name),
+    );
+    update(table: 'users', object: _users[id]);
+    notifyListeners();
+  }
 
   void addUser(int id, String name) {
     _users.putIfAbsent(

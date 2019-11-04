@@ -62,7 +62,7 @@ class ConversationWidget extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: Theme.of(context).primaryColor,
+          color: Theme.of(context).accentColor,
         ),
         margin: EdgeInsets.all(10),
         padding: EdgeInsets.all(5),
