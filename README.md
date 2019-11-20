@@ -1,16 +1,15 @@
-# mobile
+# Chirp Nets
 
-A new Flutter application.
+An off grid communications solution.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+Download Flutter: https://flutter.dev/docs/get-started/install.
 
-A few resources to get you started if this is your first Flutter project:
+## Install packages
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+flutter pub get
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Run application when appropreate device is connected
+
+flutter run

@@ -1,4 +1,4 @@
-import './model.dart';
+import 'package:chirp_nets/models/model.dart';
 
 class User implements Model {
   final int id;
@@ -12,7 +12,6 @@ class User implements Model {
   @override
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
       'name': name,
     };
   }

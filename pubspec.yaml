@@ -1,4 +1,4 @@
-name: mobile
+name: chirp_nets
 description: A new Flutter application.
 
 # The following defines the version and build number for your application.
@@ -21,7 +21,10 @@ dependencies:
     sdk: flutter
   sqflite: ^1.1.7+1
   path: 
-  flutter_blue: ^0.6.2
+  flutter_blue: 0.6.2
+  provider: ^3.1.0+1
+  flutter_slidable: ^0.5.4
+  fluttertoast: ^3.1.3
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -30,7 +33,12 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: "^0.7.3"
 
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "lib/assets/chirp_logo.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

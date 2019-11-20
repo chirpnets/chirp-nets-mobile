@@ -1,8 +1,15 @@
+import 'package:chirp_nets/models/user.dart';
+import 'package:chirp_nets/providers/users.dart';
+import 'package:chirp_nets/screens/bluetooth_screen.dart';
+import 'package:chirp_nets/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
-import './contacts.dart';
-import '../models/user.dart';
-import '../utils/database.dart';
-import '../models/conversation.dart';
+import 'package:provider/provider.dart';
+
+import 'package:chirp_nets/screens/conversations_screen.dart';
+import 'package:chirp_nets/screens/messages_screen.dart';
+import 'package:chirp_nets/utils/database.dart';
+import 'package:chirp_nets/providers/messages.dart';
+import 'package:chirp_nets/providers/conversations.dart';
 
 class ChirpNets extends StatefulWidget {
   @override
@@ -10,15 +17,30 @@ class ChirpNets extends StatefulWidget {
 }
 
 class _ChirpNetsState extends State<ChirpNets> {
-  void handleAddGroup() {}
+  User currentUser;
 
-  List<User> users;
-  List<Conversation> groups;
+  void setUp() async {
+    List<User> users = await getUsers();
+    setState(() {
+      this.currentUser =
+          users.firstWhere((user) => user.id == 1, orElse: () => null);
+    });
+  }
+
+  void closeDatabase() async {
+    close();
+  }
 
   @override
-  void initState() { 
+  void initState() {
     super.initState();
-    //db queries go here 
+    setUp();
+  }
+
+  @override
+  void dispose() {
+    closeDatabase();
+    super.dispose();
   }
 
   @override
@@ -26,23 +48,53 @@ class _ChirpNetsState extends State<ChirpNets> {
     return MaterialApp(
       title: 'Chirp Nets',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.orange,
+        accentColor: Colors.orangeAccent,
+        canvasColor: Color.fromRGBO(20, 51, 51, 1),
+        buttonColor: Colors.teal,
+        errorColor: Colors.red,
       ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Groups'),
-        ),
-        body: Contacts(
-          groups: [],
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => this.handleAddGroup(),
-          tooltip: 'Add Group',
-          child: Icon(
-            Icons.add,
+      home: MultiProvider(
+        providers: [
+          ChangeNotifierProvider.value(
+            value: Conversations(),
           ),
+          ChangeNotifierProvider.value(
+            value: Users(),
+          ),
+          ChangeNotifierProvider.value(
+            value: Messages(),
+          ),
+        ],
+        child: ConversationsScreen(
+          addUser: currentUser == null,
         ),
       ),
+      routes: {
+        MessagesScreen.routeName: (ctx) => MultiProvider(
+              providers: [
+                ChangeNotifierProvider.value(
+                  value: Users(),
+                ),
+                ChangeNotifierProvider.value(
+                  value: Messages(),
+                ),
+              ],
+              child: MessagesScreen(),
+            ),
+        SettingsScreen.routeName: (ctx) => MultiProvider(
+              providers: [
+                ChangeNotifierProvider.value(
+                  value: Users(),
+                ),
+              ],
+              child: SettingsScreen(),
+            ),
+        BluetoothScreen.routeName: (ctx) => MultiProvider(
+              providers: [],
+              child: BluetoothScreen(),
+            )
+      },
     );
   }
 }

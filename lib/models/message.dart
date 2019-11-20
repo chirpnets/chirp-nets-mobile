@@ -1,20 +1,26 @@
-import './model.dart';
+import 'package:chirp_nets/models/model.dart';
 
 class Message implements Model {
   final int id;
+  final int createdBy;
+  final int conversationId;
   final String message;
   final DateTime createdAt;
-  final int conversationId;
 
-  Message({this.id, this.message, this.conversationId, this.createdAt});
+  Message(
+      {this.id,
+      this.message,
+      this.conversationId,
+      this.createdAt,
+      this.createdBy});
 
   @override
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
-      'message': message,
+      'createdBy': createdBy,
       'conversationId': conversationId,
-      'createdAt': createdAt,
+      'message': message,
+      'createdAt': createdAt.toString(),
     };
   }
 }
