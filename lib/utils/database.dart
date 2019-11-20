@@ -5,31 +5,35 @@ import 'package:chirp_nets/models/device.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-final List<String> migrations = [
-  "CREATE TABLE users(id INTEGER PRIMARY KEY, name TEXT);",
-  "CREATE TABLE devices(id INTEGER PRIMARY KEY, userId INTEGER, deviceRSSI TEXT, FOREIGN KEY(userId) REFERENCES users(id));",
-  "CREATE TABLE conversations(id INTEGER PRIMARY KEY, userId INTEGER, name TEXT, FOREIGN KEY(userId) REFERENCES users(id));",
-  "CREATE TABLE messages(id INTEGER PRIMARY KEY, conversationId INTEGER, message TEXT, createdAt TEXT, FOREIGN KEY(conversationId) REFERENCES conversations(id) ON DELETE CASCADE);",
-  "ALTER TABLE devices ADD COLUMN name;",
-  "ALTER TABLE messages ADD COLUMN createdBy INTEGER; ALTER TABLE messages add FOREIGN KEY(createdBy) REFERENCES users(id)",
-];
+final Map<int, List<String>> migrations = {
+  0: [
+    "CREATE TABLE users(id INTEGER PRIMARY KEY, name TEXT);",
+    "CREATE TABLE devices(id INTEGER PRIMARY KEY, userId INTEGER, deviceRSSI TEXT, FOREIGN KEY(userId) REFERENCES users(id));",
+    "CREATE TABLE conversations(id INTEGER PRIMARY KEY, userId INTEGER, name TEXT, FOREIGN KEY(userId) REFERENCES users(id));",
+    "CREATE TABLE messages(id INTEGER PRIMARY KEY, conversationId INTEGER, message TEXT, createdAt TEXT, FOREIGN KEY(conversationId) REFERENCES conversations(id) ON DELETE CASCADE);",
+    "ALTER TABLE devices ADD COLUMN name;",
+    "ALTER TABLE messages ADD COLUMN createdBy INTEGER; ALTER TABLE messages add FOREIGN KEY(createdBy) REFERENCES users(id)",
+  ]
+};
 
 Future<Database> getDatabase() async {
   final Future<Database> database = openDatabase(
     join(await getDatabasesPath(), 'chirpnets.db'),
     onCreate: (db, version) {
-      for (var script in migrations) {
-        db.execute(script);
+      for (var i = 0; i <= version; i++) {
+        for (var migration in migrations[i]) {
+          db.execute(migration);
+        }
       }
     },
     onUpgrade: (db, oldVersion, newVersion) async {
       var batch = db.batch();
-      for (var i = oldVersion - 1; i == newVersion - 1; i++) {
-        batch.execute(migrations[i]);
+      for (var migration in migrations[newVersion]) {
+        batch.execute(migration);
       }
       await batch.commit();
     },
-    version: migrations.length,
+    version: 0,
   );
   return database;
 }
@@ -145,4 +149,3 @@ Future<List<Message>> getMessages({where, whereArgs}) async {
     );
   });
 }
-
