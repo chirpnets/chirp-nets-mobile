@@ -1,22 +1,13 @@
-import 'package:chirp_nets/models/conversation.dart';
-import 'package:chirp_nets/models/user.dart';
+import 'package:flutter/material.dart';
+
 import 'package:chirp_nets/providers/conversations.dart';
 import 'package:chirp_nets/providers/users.dart';
-import 'package:chirp_nets/utils/database.dart';
-import 'package:flutter/material.dart';
 
 class AddFirstUserWidget extends StatelessWidget {
   void createUserAndConversation(name, Users users, conversationName,
-      Conversations conversations, BuildContext ctx) {
-    User user = User(name: name);
-    create(table: 'users', object: user).then((id) {
-      users.addUser(id, name);
-      Conversation conv = Conversation(name: conversationName, userId: id);
-      create(table: 'conversations', object: conv).then(
-        (convId) => conversations.addConversation(convId, id, conversationName),
-      );
-    });
-
+      Conversations conversations, BuildContext ctx) async {
+    int id = await users.addUser(name);
+    conversations.addConversation(id, conversationName);
     Navigator.of(ctx).pop();
   }
 

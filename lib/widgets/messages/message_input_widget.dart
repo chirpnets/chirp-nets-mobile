@@ -3,7 +3,6 @@ import 'package:chirp_nets/models/message.dart';
 import 'package:chirp_nets/models/user.dart';
 import 'package:chirp_nets/providers/messages.dart';
 import 'package:chirp_nets/providers/users.dart';
-import 'package:chirp_nets/utils/database.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -35,16 +34,12 @@ class MessageInputWidget extends StatelessWidget {
       conversationId: conversationId,
       createdBy: user.id,
     );
-    create(
-      table: 'messages',
-      object: messageObject,
-    ).then((id) => provider.addMessage(
-          id,
-          messageObject.createdBy,
-          messageObject.conversationId,
-          messageObject.message,
-          messageObject.createdAt,
-        ));
+    provider.addMessage(
+      messageObject.createdBy,
+      messageObject.conversationId,
+      messageObject.message,
+      messageObject.createdAt,
+    );
 
     textController.clear();
   }

@@ -6,7 +6,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 final Map<int, List<String>> migrations = {
-  0: [
+  1: [
     "CREATE TABLE users(id INTEGER PRIMARY KEY, name TEXT);",
     "CREATE TABLE devices(id INTEGER PRIMARY KEY, userId INTEGER, deviceRSSI TEXT, FOREIGN KEY(userId) REFERENCES users(id));",
     "CREATE TABLE conversations(id INTEGER PRIMARY KEY, userId INTEGER, name TEXT, FOREIGN KEY(userId) REFERENCES users(id));",
@@ -20,7 +20,7 @@ Future<Database> getDatabase() async {
   final Future<Database> database = openDatabase(
     join(await getDatabasesPath(), 'chirpnets.db'),
     onCreate: (db, version) {
-      for (var i = 0; i <= version; i++) {
+      for (var i = 1; i <= version; i++) {
         for (var migration in migrations[i]) {
           db.execute(migration);
         }
@@ -33,7 +33,7 @@ Future<Database> getDatabase() async {
       }
       await batch.commit();
     },
-    version: 0,
+    version: 1,
   );
   return database;
 }

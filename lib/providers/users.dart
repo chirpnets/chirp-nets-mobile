@@ -33,7 +33,9 @@ class Users with ChangeNotifier {
     notifyListeners();
   }
 
-  void addUser(int id, String name) {
+  Future<int> addUser(String name) async {
+    User user = User(name: name);
+    int id = await create(table: 'users', object: user);
     _users.putIfAbsent(
       id,
       () => User(
@@ -42,6 +44,7 @@ class Users with ChangeNotifier {
       ),
     );
     notifyListeners();
+    return id;
   }
 
   User getCurrentUser() {
