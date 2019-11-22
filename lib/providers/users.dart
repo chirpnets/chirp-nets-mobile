@@ -33,9 +33,13 @@ class Users with ChangeNotifier {
     notifyListeners();
   }
 
+<<<<<<< HEAD
   Future<int> addUser(String name) async {
     User user = User(name: name);
     int id = await create(table: 'users', object: user);
+=======
+  void addUser(int id, String name) {
+>>>>>>> 979501d2cb6d260ccee2453234d4c83f6fc29de4
     _users.putIfAbsent(
       id,
       () => User(
@@ -44,7 +48,10 @@ class Users with ChangeNotifier {
       ),
     );
     notifyListeners();
+<<<<<<< HEAD
     return id;
+=======
+>>>>>>> 979501d2cb6d260ccee2453234d4c83f6fc29de4
   }
 
   User getCurrentUser() {

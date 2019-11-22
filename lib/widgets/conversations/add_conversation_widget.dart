@@ -62,7 +62,11 @@ class AddConversationWidget extends StatelessWidget {
                 margin: EdgeInsets.symmetric(vertical: 10),
                 child: RaisedButton(
                   onPressed: () => addConversation(
-                      conversationData, user, textController.text, context),
+                    conversationData,
+                    user,
+                    textController.text,
+                    context,
+                  ),
                   color: Theme.of(context).canvasColor,
                   child: Icon(
                     Icons.add_comment,
