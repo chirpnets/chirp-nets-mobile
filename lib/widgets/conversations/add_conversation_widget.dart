@@ -18,7 +18,10 @@ class AddConversationWidget extends StatelessWidget {
       return;
     }
     if (conversation != null) {
-      conversationData.updateConversation(conversation.id, name);
+      conversationData.updateConversation(
+        conversation.id,
+        name,
+      );
     } else {
       Conversation conv = Conversation(
         userId: user.id,
@@ -37,8 +40,10 @@ class AddConversationWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     if (conversation != null) {
       textController.text = conversation.name;
-      textController.selection =
-          TextSelection(baseOffset: 0, extentOffset: conversation.name.length);
+      textController.selection = TextSelection(
+        baseOffset: 0,
+        extentOffset: conversation.name.length,
+      );
     }
     return Container(
       child: Card(
@@ -54,8 +59,12 @@ class AddConversationWidget extends StatelessWidget {
                   hasFloatingPlaceholder: true,
                   hintText: 'Enter Group Name...',
                 ),
-                onSubmitted: (String message) =>
-                    addConversation(conversationData, user, message, context),
+                onSubmitted: (String message) => addConversation(
+                  conversationData,
+                  user,
+                  message,
+                  context,
+                ),
                 controller: textController,
               ),
               Container(

@@ -33,7 +33,7 @@ Future<Database> getDatabase() async {
       }
       await batch.commit();
     },
-    version: 0,
+    version: 1,
   );
   return database;
 }
