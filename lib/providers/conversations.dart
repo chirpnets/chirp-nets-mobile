@@ -48,7 +48,9 @@ class Conversations with ChangeNotifier {
     notifyListeners();
   }
 
-  void addConversation(int id, int userId, String name) {
+  Future<int> addConversation(int userId, String name) async {
+    Conversation conversation = Conversation(userId: userId, name: name);
+    int id = await create(table: 'conversations', object: conversation);
     _conversations.putIfAbsent(
       id,
       () => Conversation(
@@ -58,5 +60,6 @@ class Conversations with ChangeNotifier {
       ),
     );
     notifyListeners();
+    return id;
   }
 }

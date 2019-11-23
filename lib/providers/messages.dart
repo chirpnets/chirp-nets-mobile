@@ -20,8 +20,15 @@ class Messages with ChangeNotifier {
     _messages = {for (var message in messages) message.id: message};
   }
 
-  void addMessage(int id, int createdBy, int conversationId, String message,
-      DateTime createdAt) {
+  Future<int> addMessage(
+      int createdBy, int conversationId, String message, DateTime createdAt) async {
+    Message newMessage = Message(
+      createdBy: createdBy,
+      conversationId: conversationId,
+      message: message,
+      createdAt: createdAt,
+    );
+    int id = await create(table: 'messages', object: newMessage);
     _messages.putIfAbsent(
       id,
       () => Message(
@@ -33,6 +40,7 @@ class Messages with ChangeNotifier {
       ),
     );
     notifyListeners();
+    return id;
   }
 
   List<Message> getList() {
