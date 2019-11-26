@@ -93,7 +93,7 @@ class _ChirpNetsState extends State<ChirpNets> {
         BluetoothScreen.routeName: (ctx) => MultiProvider(
               providers: [],
               child: BluetoothScreen(),
-            )
+            ),
       },
     );
   }

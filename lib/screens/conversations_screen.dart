@@ -51,7 +51,7 @@ class ConversationsScreen extends StatelessWidget {
           child: Icon(
             Icons.settings,
           ),
-        )
+        ),
       ]),
       body: Center(
         child: ConversationsListWidget(
