@@ -30,7 +30,7 @@ class Conversations with ChangeNotifier {
   }
 
   void deleteConversation(int id) {
-    _conversations.removeWhere((convId, conversation) => id == convId);
+    _conversations.remove(id);
     delete(table: 'conversations', id: id);
     notifyListeners();
   }

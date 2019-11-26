@@ -2,18 +2,16 @@ import 'package:chirp_nets/models/user.dart';
 import 'package:chirp_nets/utils/database.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-void main() {
-  TestWidgetsFlutterBinding.ensureInitialized();
+void databaseTest() {
   group('Database functions =>', () {
+
+    setUp(() async {
+      var db = await database;
+      db.rawDelete('DELETE FROM users WHERE id > 0;');
+    });
     test('Can create database', () async {
       var db = await database;
       expect(db.isOpen, equals(true));
-    });
-
-    test('Can close database', () async {
-      var db = await database;
-      close();
-      expect(db.isOpen, false);
     });
 
     test('Can insert into database', () async {

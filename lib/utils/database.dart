@@ -7,7 +7,7 @@ import 'package:sqflite/sqflite.dart';
 
 final Map<int, List<String>> migrations = {
   1: [
-    "CREATE TABLE users(id INTEGER PRIMARY KEY, name TEXT);",
+    "CREATE TABLE users(id INTEGER PRIMARY KEY, name TEXT, isCurrentUser INTEGER);",
     "CREATE TABLE devices(id INTEGER PRIMARY KEY, userId INTEGER, deviceRSSI TEXT, FOREIGN KEY(userId) REFERENCES users(id));",
     "CREATE TABLE conversations(id INTEGER PRIMARY KEY, userId INTEGER, name TEXT, FOREIGN KEY(userId) REFERENCES users(id));",
     "CREATE TABLE messages(id INTEGER PRIMARY KEY, conversationId INTEGER, message TEXT, createdAt TEXT, FOREIGN KEY(conversationId) REFERENCES conversations(id) ON DELETE CASCADE);",
@@ -38,16 +38,16 @@ Future<Database> getDatabase() async {
   return database;
 }
 
-void close() async {
+Future<bool> close() async {
   var db = await database;
   await db.close();
+  return !db.isOpen;
 }
 
 final Future<Database> database = getDatabase();
 
 Future<int> create({String table, dynamic object}) async {
   final Database db = await database;
-
   return await db.insert(
     table,
     object.toMap(),
@@ -89,6 +89,7 @@ Future<List<User>> getUsers({where, whereArgs}) async {
     return User(
       id: maps[i]['id'],
       name: maps[i]['name'],
+      isCurrentUser: maps[i]['isCurrentUser'] > 0 ? true : false,
     );
   });
 }

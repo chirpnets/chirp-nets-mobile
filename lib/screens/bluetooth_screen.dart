@@ -34,7 +34,6 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(bluetooth.isScanning);
     return Scaffold(
       appBar: AppBar(
         title: Text('Bluetooth Devices'),
