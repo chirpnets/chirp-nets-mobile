@@ -49,4 +49,10 @@ class Messages with ChangeNotifier {
     messages.sort((a, b) => -a.createdAt.compareTo(b.createdAt));
     return messages;
   }
+
+  void deleteMessage(id) {
+    _messages.remove(id);
+    delete(table: 'messages', id: id);
+    notifyListeners();
+  }
 }

@@ -27,20 +27,21 @@ class Users with ChangeNotifier {
   void updateUser(int id, String name) {
     _users.update(
       id,
-      (oldUser) => User(id: oldUser.id, name: name),
+      (oldUser) => User(id: oldUser.id, name: name, isCurrentUser: oldUser.isCurrentUser),
     );
     update(table: 'users', object: _users[id]);
     notifyListeners();
   }
 
-  Future<int> addUser(String name) async {
-    User user = User(name: name);
+  Future<int> addUser(String name, {bool isCurrentUser=false}) async {
+    User user = User(name: name, isCurrentUser: isCurrentUser);
     int id = await create(table: 'users', object: user);
     _users.putIfAbsent(
       id,
       () => User(
         id: id,
         name: name,
+        isCurrentUser: isCurrentUser,
       ),
     );
     notifyListeners();
@@ -48,6 +49,18 @@ class Users with ChangeNotifier {
   }
 
   User getCurrentUser() {
-    return _users.containsKey(1) ? _users[1] : null;
+    var users = _users.values;
+    for (var user in users) {
+      if (user.isCurrentUser) {
+        return user;
+      }
+    }
+    return null;
+  }
+
+  void deleteUser (int id) {
+    delete(table: 'users', id:id);
+    _users.remove(id);
+    notifyListeners();
   }
 }

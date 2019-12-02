@@ -6,7 +6,7 @@ import 'package:chirp_nets/providers/users.dart';
 class AddFirstUserWidget extends StatelessWidget {
   void createUserAndConversation(name, Users users, conversationName,
       Conversations conversations, BuildContext ctx) async {
-    int id = await users.addUser(name);
+    int id = await users.addUser(name, isCurrentUser: true);
     conversations.addConversation(id, conversationName);
     Navigator.of(ctx).pop();
   }
