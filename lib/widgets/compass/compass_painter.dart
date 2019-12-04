@@ -5,6 +5,12 @@ import 'package:chirp_nets/utils/theme.dart';
 import 'package:chirp_nets/utils/utils.dart';
 import 'package:flutter/material.dart';
 
+enum directions {
+  north,
+  south,
+  east,
+  west,
+}
 
 class CompassPainter extends CustomPainter {
   List<Map<String, dynamic>> locations;
@@ -86,69 +92,71 @@ class CompassPainter extends CustomPainter {
     painter.paint(canvas, point);
   }
 
+  void drawSecondaryDirection(Path path, double radius, double angle, Canvas canvas) {
+    double x = radius * sin(angle);
+    double y = radius * cos(angle);
+    Offset offset = Offset(3 * x / 4, 3 * y / 4);
+    path.addPolygon([Offset(0, 6), Offset(0, -6), offset], true);
+    canvas.drawPath(path, subDirectionPaint);
+  }
+
+  void drawMainDirection(Path path, Paint paint, double radius, directions direction, Canvas canvas) {
+    double scale = 0.95;
+    Offset edgePoint;
+    Offset referencePointOne;
+    Offset referencePointTwo;
+    if (direction == directions.north) {
+      drawText('N', Offset(-7, -radius), canvas);
+      edgePoint = Offset(0, -scale * radius);
+      referencePointOne = Offset(10, 0);
+      referencePointTwo = Offset(-10, 0);
+    }
+    else if (direction == directions.east) {
+      drawText('E', Offset(radius-17, -13), canvas);
+      edgePoint = Offset(scale * radius, 0);
+      referencePointOne = Offset(0, 10);
+      referencePointTwo = Offset(0, -10);
+    }
+    else if (direction == directions.south) {
+      drawText('S', Offset(-7, radius-24), canvas);
+      edgePoint = Offset(0, scale * radius);
+      referencePointOne = Offset(10, 0);
+      referencePointTwo = Offset(-10, 0);
+    }
+    else {
+    drawText('W', Offset(-radius+5, -12), canvas);
+      edgePoint = Offset(scale * -radius, 0);
+      referencePointOne = Offset(0, 10);
+      referencePointTwo = Offset(0, -10);
+    }
+
+    path.addPolygon([referencePointOne, referencePointTwo, edgePoint], true);
+    canvas.drawPath(path, paint);
+    path.reset();
+  }
+
   void drawDefaultLabels(double radius, Canvas canvas) {
     Path path = Path();
     canvas.save();
     canvas.translate(radius, radius);
     path.moveTo(0, 0);
-    double x;
-    double y;
-    double scale = 0.95;
     // North
-    drawText('N', Offset(-7, -radius), canvas);
-    Offset offset = Offset(0, -scale * radius);
-    path.addPolygon([Offset(10, 0), Offset(-10, 0), offset], true);
-    canvas.drawPath(path, northPaint);
-    path.reset();
-
+    drawMainDirection(path, northPaint, radius, directions.north, canvas);
     // East
-    drawText('E', Offset(radius-17, -13), canvas);
-    offset = Offset(scale * radius, 0);
-    path.addPolygon([Offset(0, 10), Offset(0, -10), offset], true);
-    canvas.drawPath(path, directionPaint);
-    path.reset();
-
+    drawMainDirection(path, directionPaint, radius, directions.east, canvas);
     // South
-    drawText('S', Offset(-7, radius-24), canvas);
-    offset = Offset(0, scale * radius);
-    path.addPolygon([Offset(10, 0), Offset(-10, 0), offset], true);
-    canvas.drawPath(path, directionPaint);
-    path.reset();
-
+    drawMainDirection(path, directionPaint, radius, directions.south, canvas);
     // West
-    drawText('W', Offset(-radius+5, -12), canvas);
-    offset = Offset(scale * -radius, 0);
-    path.addPolygon([Offset(0, 10), Offset(0, -10), offset], true);
-    canvas.drawPath(path, directionPaint);
-    path.reset();
+    drawMainDirection(path, directionPaint, radius, directions.west, canvas);
 
     // North East
-    x = radius * sin(3 * pi / 4);
-    y = radius * cos(3 * pi / 4);
-    offset = Offset(3 * x / 4, 3 * y / 4);
-    path.addPolygon([Offset(0, 6), Offset(0, -6), offset], true);
-    canvas.drawPath(path, subDirectionPaint);
-
+    drawSecondaryDirection(path, radius, 3*pi/4, canvas);
     // South East
-    x = radius * sin(pi / 4);
-    y = radius * cos(pi / 4);
-    offset = Offset(3 * x / 4, 3 * y / 4);
-    path.addPolygon([Offset(0, 6), Offset(0, -6), offset], true);
-    canvas.drawPath(path, subDirectionPaint);
-
+    drawSecondaryDirection(path, radius, pi / 4, canvas);
     // South West
-    x = radius * sin(5 * pi / 4);
-    y = radius * cos(5 * pi / 4);
-    offset = Offset(3 * x / 4, 3 * y / 4);
-    path.addPolygon([Offset(0, 6), Offset(0, -6), offset], true);
-    canvas.drawPath(path, subDirectionPaint);
-
+    drawSecondaryDirection(path, radius, 5 * pi / 4, canvas);
     // North West
-    x = radius * sin(7 * pi / 4);
-    y = radius * cos(7 * pi / 4);
-    offset = Offset(3 * x / 4, 3 * y / 4);
-    path.addPolygon([Offset(0, 6), Offset(0, -6), offset], true);
-    canvas.drawPath(path, subDirectionPaint);
+    drawSecondaryDirection(path, radius, 7 * pi / 4, canvas);
 
     canvas.restore();
   }
@@ -172,9 +180,7 @@ class CompassPainter extends CustomPainter {
     canvas.save();
     canvas.translate(radius, radius);
     for (var location in locations) {
-      double x = radius * sin(pi / 4);
-      double y = radius * cos(pi / 4);
-      Offset offset = Offset(x, y); //getOffsetFromCoordinates(location);
+      Offset offset = getOffsetFromCoordinates(user, location, radius);
       drawArrow(offset, radius, userPaint, canvas);
       drawName(offset, location['name'], 40, canvas);
     }

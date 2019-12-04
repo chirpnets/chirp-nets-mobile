@@ -18,7 +18,6 @@ class Users with ChangeNotifier {
     List<User> users = await getUsers();
     for (User user in users) {
       if (user.isCurrentUser) {
-
         _currentUser = user;
       }
       _users.putIfAbsent(
@@ -61,15 +60,6 @@ class Users with ChangeNotifier {
     return _currentUser;
   }
 
-  User getCurrentUser() {
-    var users = _users.values;
-    for (var user in users) {
-      if (user.isCurrentUser) {
-        return user;
-      }
-    }
-    return null;
-  }
 
   void deleteUser(int id) {
     delete(table: 'users', id: id);

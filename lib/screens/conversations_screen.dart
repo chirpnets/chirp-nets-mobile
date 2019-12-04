@@ -14,8 +14,6 @@ import 'package:chirp_nets/models/user.dart';
 import 'package:chirp_nets/providers/conversations.dart';
 
 class ConversationsScreen extends StatefulWidget {
-  // Wait until page is loaded and check if a user exits
-  // If no user exists prompt the user to create
   ConversationsScreen();
 
   @override
