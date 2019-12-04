@@ -4,11 +4,15 @@ class User implements Model {
   final int id;
   final String name;
   final bool isCurrentUser;
+  final String longitude;
+  final String latitude;
 
   User({
     this.id,
     this.name,
     this.isCurrentUser = false,
+    this.longitude,
+    this.latitude,
   });
 
   @override
@@ -16,6 +20,8 @@ class User implements Model {
     return {
       'name': name,
       'isCurrentUser': isCurrentUser ? 1 : 0,
+      'longitude': longitude,
+      'latitude': latitude,
     };
   }
 }

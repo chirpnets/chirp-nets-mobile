@@ -24,6 +24,7 @@ class DeviceWidget extends StatelessWidget {
             onPressed: () => {},
             child: Icon(
               Icons.delete,
+              color: Theme.of(context).iconTheme.color,
             ),
           )
         ],

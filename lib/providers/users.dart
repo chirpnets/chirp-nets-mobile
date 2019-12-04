@@ -8,6 +8,7 @@ class Users with ChangeNotifier {
   }
 
   Map<int, User> _users = {};
+  User _currentUser;
 
   Map<int, User> get users {
     return {..._users};
@@ -16,6 +17,10 @@ class Users with ChangeNotifier {
   void init() async {
     List<User> users = await getUsers();
     for (User user in users) {
+      if (user.isCurrentUser) {
+
+        _currentUser = user;
+      }
       _users.putIfAbsent(
         user.id,
         () => user,
@@ -27,13 +32,17 @@ class Users with ChangeNotifier {
   void updateUser(int id, String name) {
     _users.update(
       id,
-      (oldUser) => User(id: oldUser.id, name: name, isCurrentUser: oldUser.isCurrentUser),
+      (oldUser) => User(
+        id: oldUser.id,
+        name: name,
+        isCurrentUser: oldUser.isCurrentUser,
+      ),
     );
     update(table: 'users', object: _users[id]);
     notifyListeners();
   }
 
-  Future<int> addUser(String name, {bool isCurrentUser=false}) async {
+  Future<int> addUser(String name, {bool isCurrentUser = false}) async {
     User user = User(name: name, isCurrentUser: isCurrentUser);
     int id = await create(table: 'users', object: user);
     _users.putIfAbsent(
@@ -48,6 +57,10 @@ class Users with ChangeNotifier {
     return id;
   }
 
+  User get currentUser {
+    return _currentUser;
+  }
+
   User getCurrentUser() {
     var users = _users.values;
     for (var user in users) {
@@ -58,9 +71,38 @@ class Users with ChangeNotifier {
     return null;
   }
 
-  void deleteUser (int id) {
-    delete(table: 'users', id:id);
+  void deleteUser(int id) {
+    delete(table: 'users', id: id);
     _users.remove(id);
     notifyListeners();
+  }
+
+  void updateLocation({int id, double latitude, double longitude}) {
+    User user = _users.update(
+      id,
+      (oldUser) => User(
+        id: oldUser.id,
+        name: oldUser.name,
+        isCurrentUser: oldUser.isCurrentUser,
+        latitude: latitude.toString(),
+        longitude: longitude.toString(),
+      ),
+    );
+    update(table: 'users', object: user);
+    notifyListeners();
+  }
+
+  List<Map<String, dynamic>> getUsersLocations() {
+    List<Map<String, dynamic>> userLocations = [];
+    for (var user in _users.values) {
+      if (!user.isCurrentUser) {
+        userLocations.add({
+          'latitude': user.latitude,
+          'longitude': user.longitude,
+          'name': user.name,
+        });
+      }
+    }
+    return userLocations;
   }
 }

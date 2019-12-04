@@ -30,6 +30,7 @@ class AddFirstUserWidget extends StatelessWidget {
               children: [
                 Text(
                   'Enter your name, this will be displayed by your messages.',
+                  style: Theme.of(context).textTheme.body1,
                 ),
                 Container(
                   width: MediaQuery.of(context).size.width,
@@ -39,9 +40,11 @@ class AddFirstUserWidget extends StatelessWidget {
                       Container(
                         width: MediaQuery.of(context).size.width * 0.6,
                         child: TextField(
+                          style: Theme.of(context).textTheme.body1,
                           autofocus: true,
                           textCapitalization: TextCapitalization.words,
                           decoration: InputDecoration(
+                            hintStyle: Theme.of(context).textTheme.body1,
                             hasFloatingPlaceholder: true,
                             hintText: 'Enter Your Name...',
                           ),
@@ -59,9 +62,11 @@ class AddFirstUserWidget extends StatelessWidget {
                       Container(
                         width: MediaQuery.of(context).size.width * 0.6,
                         child: TextField(
+                          style: Theme.of(context).textTheme.body1,
                           autofocus: true,
                           textCapitalization: TextCapitalization.words,
                           decoration: InputDecoration(
+                            hintStyle: Theme.of(context).textTheme.body1,
                             hasFloatingPlaceholder: true,
                             hintText: 'Enter Group Name...',
                           ),
@@ -87,10 +92,10 @@ class AddFirstUserWidget extends StatelessWidget {
                             conversationData,
                             context,
                           ),
-                          color: Theme.of(context).canvasColor,
+                          color: Theme.of(context).buttonColor,
                           child: Icon(
                             Icons.add_comment,
-                            color: Theme.of(context).primaryColor,
+                            color: Theme.of(context).iconTheme.color,
                           ),
                         ),
                       ),
@@ -104,6 +109,4 @@ class AddFirstUserWidget extends StatelessWidget {
       ),
     );
   }
-
-  createConversaton(String message, Users userData, BuildContext context) {}
 }

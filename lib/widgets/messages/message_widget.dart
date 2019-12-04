@@ -11,7 +11,9 @@ class MessageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Row(
-        mainAxisAlignment: user.id == message.createdBy ? MainAxisAlignment.end : MainAxisAlignment.start,
+        mainAxisAlignment: user.id == message.sentBy
+            ? MainAxisAlignment.end
+            : MainAxisAlignment.start,
         children: [
           Container(
             alignment: Alignment.topLeft,
@@ -25,12 +27,15 @@ class MessageWidget extends StatelessWidget {
               left: 5,
             ),
             decoration: BoxDecoration(
-              color: user.id == message.createdBy
+              color: user.id == message.sentBy
                   ? Theme.of(context).accentColor
                   : Theme.of(context).primaryColor,
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Text(message.message),
+            child: Text(
+              message.message,
+              style: Theme.of(context).textTheme.body1,
+            ),
           ),
         ],
       ),

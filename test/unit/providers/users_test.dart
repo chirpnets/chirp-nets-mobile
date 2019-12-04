@@ -25,9 +25,9 @@ void usersTest() {
 
     test('Can get current user', () async {
       var id = await userData.addUser('test_user', isCurrentUser: true);
-      expect(userData.getCurrentUser(), isInstanceOf<User>());
-      expect(userData.getCurrentUser().id, equals(id));
-      expect(userData.getCurrentUser().name, equals('test_user'));
+      expect(userData.currentUser, isInstanceOf<User>());
+      expect(userData.currentUser.id, equals(id));
+      expect(userData.currentUser.name, equals('test_user'));
     });
 
     test(

@@ -19,20 +19,24 @@ class TextSettingWidget extends StatelessWidget {
       children: [
         Container(
           width: MediaQuery.of(context).size.width * 0.2,
-          child: Text(this.title),
+          child: Text(
+            this.title,
+            style: Theme.of(context).textTheme.subtitle,
+          ),
         ),
         Container(
           width: MediaQuery.of(context).size.width * 0.4,
           child: TextField(
+            style: Theme.of(context).textTheme.body1,
             textCapitalization: TextCapitalization.words,
             controller: controller,
           ),
         ),
         RaisedButton(
-            color: Theme.of(context).canvasColor,
+            color: Theme.of(context).buttonColor,
             child: Icon(
               Icons.save,
-              color: Theme.of(context).primaryColor,
+              color: Theme.of(context).iconTheme.color,
             ),
             onPressed: () => callback(controller.text, provider, object))
       ],

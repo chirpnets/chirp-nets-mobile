@@ -32,10 +32,10 @@ class MessageInputWidget extends StatelessWidget {
       message: message,
       createdAt: now,
       conversationId: conversationId,
-      createdBy: user.id,
+      sentBy: user.id,
     );
     provider.addMessage(
-      messageObject.createdBy,
+      messageObject.sentBy,
       messageObject.conversationId,
       messageObject.message,
       messageObject.createdAt,
@@ -47,7 +47,7 @@ class MessageInputWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Messages messageData = Provider.of<Messages>(context);
-    final User user = Provider.of<Users>(context).getCurrentUser();
+    final User user = Provider.of<Users>(context).currentUser;
 
     return Container(
       padding: EdgeInsets.all(5),
@@ -62,8 +62,10 @@ class MessageInputWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(5),
             ),
             child: TextField(
+              style: Theme.of(context).textTheme.body1,
               textCapitalization: TextCapitalization.sentences,
               decoration: InputDecoration(
+                hintStyle: Theme.of(context).textTheme.body1,
                 hasFloatingPlaceholder: true,
                 hintText: 'Say something nice...',
               ),
@@ -78,9 +80,10 @@ class MessageInputWidget extends StatelessWidget {
           ),
           Container(
             child: FlatButton(
-              color: Theme.of(context).accentColor,
+              color: Theme.of(context).buttonColor,
               child: Icon(
                 Icons.send,
+                color: Theme.of(context).iconTheme.color,
               ),
               onPressed: () => sendMessage(
                 textController.text,

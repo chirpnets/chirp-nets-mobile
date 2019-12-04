@@ -69,13 +69,16 @@ class ConversationWidget extends StatelessWidget {
         child: ListTile(
           onTap: () => viewMessages(context),
           leading: CircleAvatar(
-            backgroundColor: Theme.of(context).canvasColor,
+            backgroundColor: Theme.of(context).buttonColor,
             child: Icon(
               Icons.person,
-              color: Theme.of(context).accentColor,
+              color: Theme.of(context).iconTheme.color,
             ),
           ),
-          title: Text(conversation.name),
+          title: Text(
+            conversation.name,
+            style: Theme.of(context).textTheme.subtitle,
+          ),
         ),
       ),
     );
