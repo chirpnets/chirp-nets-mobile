@@ -20,8 +20,6 @@ class CompassWidget extends StatefulWidget {
 
 class _CompassWidgetState extends State<CompassWidget>
     with SingleTickerProviderStateMixin {
-  final double width = 250;
-  final double height = 250;
   final compass = FlutterCompass();
   double rotationAngle = 0;
 
@@ -54,15 +52,20 @@ class _CompassWidgetState extends State<CompassWidget>
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+    double radius = width * 0.7;
+    if (height < width) {
+      radius = height * 0.4;
+    }
     return Container(
-      height: 250,
       margin: EdgeInsets.only(top: 50),
       child: Stack(
         children: [
           Center(
             child: Container(
-              width: width,
-              height: height,
+              width: radius,
+              height: radius,
               decoration: BoxDecoration(
                 border: Border.all(
                   color: Colors.black,
@@ -90,8 +93,8 @@ class _CompassWidgetState extends State<CompassWidget>
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                   ),
-                  height: height,
-                  width: width,
+                  height: radius,
+                  width: radius,
                   child: CustomPaint(
                     painter: CompassPainter(
                       user: widget.currentUser,

@@ -52,6 +52,9 @@ class Users with ChangeNotifier {
         isCurrentUser: isCurrentUser,
       ),
     );
+    if(isCurrentUser) {
+      _currentUser = _users[id];
+    }
     notifyListeners();
     return id;
   }

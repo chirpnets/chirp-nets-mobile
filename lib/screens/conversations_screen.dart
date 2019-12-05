@@ -30,7 +30,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
       currentLocation = await location.getLocation();
     } on PlatformException catch (e) {
       if (e.code == 'PERMISSION_DENIED') {
-        var error = 'Permission denied';
+        var error = 'User denied location permissions';
         debugPrint(error);
       }
       currentLocation = null;
@@ -56,23 +56,26 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
 
   void getBottomSheet(userData, context, conversationData) {
     User user = userData.currentUser;
-    if (user == null) {
-      showModalBottomSheet(
-        context: context,
-        builder: (ctx) => AddFirstUserWidget(
-          userData: userData,
-          conversationData: conversationData,
-        ),
-      );
-    } else {
-      showModalBottomSheet(
-        context: context,
-        builder: (ctx) => AddConversationWidget(
-          conversationData: conversationData,
-          user: user,
-        ),
-      );
+    double height = MediaQuery.of(context).size.height * 0.6;
+    if (MediaQuery.of(context).orientation == Orientation.landscape) {
+      height = MediaQuery.of(context).size.height;
     }
+    showModalBottomSheet(
+      context: context,
+      builder: (ctx) => Container(
+        height: height,
+        child: user == null
+            ? AddFirstUserWidget(
+                userData: userData,
+                conversationData: conversationData,
+              )
+            : AddConversationWidget(
+                conversationData: conversationData,
+                user: user,
+              ),
+      ),
+      isScrollControlled: true,
+    );
   }
 
   @override
@@ -80,7 +83,6 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
     userData = Provider.of<Users>(context);
     final Conversations conversationData = Provider.of<Conversations>(context);
     Map<int, Conversation> conversations = conversationData.conversations;
-    User currentUser = userData.currentUser;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -108,7 +110,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
       ),
       body: Center(
         child: ConversationsListWidget(
-          currentUser: currentUser,
+          currentUser: userData.currentUser,
           conversations: conversations,
           conversationData: conversationData,
         ),
