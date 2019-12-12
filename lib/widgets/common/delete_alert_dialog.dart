@@ -24,18 +24,25 @@ class DeleteAlertDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(title),
+      title: Text(
+        title,
+        style: Theme.of(context).textTheme.title,
+      ),
       backgroundColor: Theme.of(context).primaryColor,
       actions: [
         RaisedButton(
-          child: Text(confirmText),
+          child: Text(
+            confirmText,
+            style: Theme.of(context).textTheme.body2,
+          ),
           color: Theme.of(context).errorColor,
-          onPressed: () => {
-            confirm(context, id)
-          },
+          onPressed: () => {confirm(context, id)},
         ),
         RaisedButton(
-          child: Text(cancelText),
+          child: Text(
+            cancelText,
+            style: Theme.of(context).textTheme.body2,
+          ),
           color: Theme.of(context).accentColor,
           onPressed: () => Navigator.of(context).pop(),
         )

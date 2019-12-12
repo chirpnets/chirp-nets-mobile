@@ -7,12 +7,12 @@ import 'package:sqflite/sqflite.dart';
 
 final Map<int, List<String>> migrations = {
   1: [
-    "CREATE TABLE users(id INTEGER PRIMARY KEY, name TEXT, isCurrentUser INTEGER);",
+    "CREATE TABLE users(id INTEGER PRIMARY KEY, name TEXT, isCurrentUser INTEGER, longitude TEXT, latitude TEXT);",
     "CREATE TABLE devices(id INTEGER PRIMARY KEY, userId INTEGER, deviceRSSI TEXT, FOREIGN KEY(userId) REFERENCES users(id));",
     "CREATE TABLE conversations(id INTEGER PRIMARY KEY, userId INTEGER, name TEXT, FOREIGN KEY(userId) REFERENCES users(id));",
     "CREATE TABLE messages(id INTEGER PRIMARY KEY, conversationId INTEGER, message TEXT, createdAt TEXT, FOREIGN KEY(conversationId) REFERENCES conversations(id) ON DELETE CASCADE);",
     "ALTER TABLE devices ADD COLUMN name;",
-    "ALTER TABLE messages ADD COLUMN createdBy INTEGER; ALTER TABLE messages add FOREIGN KEY(createdBy) REFERENCES users(id)",
+    "ALTER TABLE messages ADD COLUMN sentBy INTEGER; ALTER TABLE messages add FOREIGN KEY(sentBy) REFERENCES users(id)",
   ]
 };
 
@@ -57,7 +57,6 @@ Future<int> create({String table, dynamic object}) async {
 
 Future<void> update({String table, dynamic object}) async {
   final Database db = await database;
-
   await db.update(
     table,
     object.toMap(),
@@ -90,6 +89,8 @@ Future<List<User>> getUsers({where, whereArgs}) async {
       id: maps[i]['id'],
       name: maps[i]['name'],
       isCurrentUser: maps[i]['isCurrentUser'] > 0 ? true : false,
+      latitude: maps[i]['latitude'],
+      longitude: maps[i]['longitude'],
     );
   });
 }
@@ -146,7 +147,7 @@ Future<List<Message>> getMessages({where, whereArgs}) async {
       message: maps[i]['message'],
       conversationId: maps[i]['conversationId'],
       createdAt: DateTime.tryParse(maps[i]['createdAt']),
-      createdBy: maps[i]['createdBy'],
+      sentBy: maps[i]['sentBy'],
     );
   });
 }

@@ -18,7 +18,8 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
     Bluetooth bluetooth = Bluetooth();
     bluetooth.findDevices().then((res) {
       bluetooth.connectToDevice();
-      Fluttertoast.showToast(msg: 'Connecting to device. This may take a minute.');
+      Fluttertoast.showToast(
+          msg: 'Connecting to device. This may take a minute.');
     });
 
     setState(() {
@@ -36,7 +37,10 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Bluetooth Devices'),
+        title: Text(
+          'Bluetooth Devices',
+          style: Theme.of(context).textTheme.title,
+        ),
       ),
       body: Container(
         margin: EdgeInsets.symmetric(
@@ -60,7 +64,10 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Device'),
+                  Text(
+                    'Device',
+                    style: Theme.of(context).textTheme.subtitle,
+                  ),
                   DropdownButton(),
                 ],
               ),

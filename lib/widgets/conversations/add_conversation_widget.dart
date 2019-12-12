@@ -53,9 +53,11 @@ class AddConversationWidget extends StatelessWidget {
           child: Column(
             children: [
               TextField(
+                style: Theme.of(context).textTheme.body1,
                 autofocus: true,
                 textCapitalization: TextCapitalization.words,
                 decoration: InputDecoration(
+                  hintStyle: Theme.of(context).textTheme.body1,
                   hasFloatingPlaceholder: true,
                   hintText: 'Enter Group Name...',
                 ),
@@ -76,10 +78,10 @@ class AddConversationWidget extends StatelessWidget {
                     textController.text,
                     context,
                   ),
-                  color: Theme.of(context).canvasColor,
+                  color: Theme.of(context).buttonColor,
                   child: Icon(
                     Icons.add_comment,
-                    color: Theme.of(context).primaryColor,
+                    color: Theme.of(context).iconTheme.color,
                   ),
                 ),
               )

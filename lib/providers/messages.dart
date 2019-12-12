@@ -21,9 +21,9 @@ class Messages with ChangeNotifier {
   }
 
   Future<int> addMessage(
-      int createdBy, int conversationId, String message, DateTime createdAt) async {
+      int sentBy, int conversationId, String message, DateTime createdAt) async {
     Message newMessage = Message(
-      createdBy: createdBy,
+      sentBy: sentBy,
       conversationId: conversationId,
       message: message,
       createdAt: createdAt,
@@ -33,7 +33,7 @@ class Messages with ChangeNotifier {
       id,
       () => Message(
         id: id,
-        createdBy: createdBy,
+        sentBy: sentBy,
         conversationId: conversationId,
         message: message,
         createdAt: createdAt,

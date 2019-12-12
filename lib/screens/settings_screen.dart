@@ -26,11 +26,14 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Users userData = Provider.of<Users>(context);
-    User currentUser = userData.getCurrentUser();
+    User currentUser = userData.currentUser;
     var name = currentUser == null ? '' : currentUser.name;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings'),
+        title: Text(
+          'Settings',
+          style: Theme.of(context).textTheme.title,
+        ),
       ),
       body: ListView(
         children: [

@@ -18,11 +18,14 @@ class MessagesScreen extends StatelessWidget {
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
     final Conversation conversation = routeArgs['conversation'];
     final Messages messageData = Provider.of<Messages>(context);
-    final User user = Provider.of<Users>(context).getCurrentUser();
+    final User user = Provider.of<Users>(context).currentUser;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(conversation.name),
+        title: Text(
+          conversation.name,
+          style: Theme.of(context).textTheme.title,
+        ),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
