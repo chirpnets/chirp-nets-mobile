@@ -37,6 +37,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: Theme.of(context).iconTheme,
         title: Text(
           'Bluetooth Devices',
           style: Theme.of(context).textTheme.title,
@@ -68,7 +69,6 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                     'Device',
                     style: Theme.of(context).textTheme.subtitle,
                   ),
-                  DropdownButton(),
                 ],
               ),
             ),

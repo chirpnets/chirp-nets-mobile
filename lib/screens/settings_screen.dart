@@ -30,6 +30,7 @@ class SettingsScreen extends StatelessWidget {
     var name = currentUser == null ? '' : currentUser.name;
     return Scaffold(
       appBar: AppBar(
+        iconTheme: Theme.of(context).iconTheme,
         title: Text(
           'Settings',
           style: Theme.of(context).textTheme.title,

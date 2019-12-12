@@ -28,10 +28,10 @@ class CompassPainter extends CustomPainter {
         subDirectionPaint = Paint(),
         circlePaint = Paint() {
     circlePaint
-      ..color = primaryTheme.canvasColor
+      ..color = Colors.grey[600]
       ..style = PaintingStyle.fill;
     subDirectionPaint
-      ..color = primaryTheme.canvasColor
+      ..color = Colors.grey[600]
       ..style = PaintingStyle.stroke
       ..strokeWidth = 5.0;
     directionPaint
@@ -186,8 +186,10 @@ class CompassPainter extends CustomPainter {
     }
     canvas.restore();
     canvas.drawCircle(Offset(radius, radius), radius / 6, circlePaint);
-    circlePaint.color = Colors.grey[300];
-    canvas.drawCircle(Offset(radius, radius), radius / 20, circlePaint);
+    Paint smallCirclePaint = Paint();
+    smallCirclePaint.color = Colors.grey[300];
+    smallCirclePaint.style = PaintingStyle.fill;
+    canvas.drawCircle(Offset(radius, radius), radius / 20, smallCirclePaint);
   }
 
   @override

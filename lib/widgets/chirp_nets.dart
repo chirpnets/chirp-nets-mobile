@@ -15,19 +15,22 @@ class ChirpNets extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Conversations conversationProvider = Conversations();
+    Messages messageProvider = Messages();
+    Users userProvider = Users();
     return MaterialApp(
       title: 'Chirp Nets',
       theme: primaryTheme,
       home: MultiProvider(
         providers: [
           ChangeNotifierProvider.value(
-            value: Conversations(),
+            value: conversationProvider,
           ),
           ChangeNotifierProvider.value(
-            value: Users(),
+            value: userProvider,
           ),
           ChangeNotifierProvider.value(
-            value: Messages(),
+            value: messageProvider,
           ),
         ],
         child: ConversationsScreen(),
@@ -36,10 +39,10 @@ class ChirpNets extends StatelessWidget {
         MessagesScreen.routeName: (ctx) => MultiProvider(
               providers: [
                 ChangeNotifierProvider.value(
-                  value: Users(),
+                  value: userProvider,
                 ),
                 ChangeNotifierProvider.value(
-                  value: Messages(),
+                  value: messageProvider,
                 ),
               ],
               child: MessagesScreen(),
@@ -47,7 +50,7 @@ class ChirpNets extends StatelessWidget {
         SettingsScreen.routeName: (ctx) => MultiProvider(
               providers: [
                 ChangeNotifierProvider.value(
-                  value: Users(),
+                  value: userProvider,
                 ),
               ],
               child: SettingsScreen(),
@@ -59,7 +62,7 @@ class ChirpNets extends StatelessWidget {
         CompassScreen.routeName: (ctx) => MultiProvider(
               providers: [
                 ChangeNotifierProvider.value(
-                  value: Users(),
+                  value: userProvider,
                 ),
               ],
               child: CompassScreen(),

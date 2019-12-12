@@ -132,10 +132,10 @@ Future<List<Device>> getDevices({where, whereArgs}) async {
   });
 }
 
-Future<List<Message>> getMessages({where, whereArgs}) async {
+Future<List<Message>> getMessages({where, whereArgs, limit, orderby='id DESC'}) async {
   final Database db = await database;
 
-  final maps = await db.query('messages', where: where, whereArgs: whereArgs);
+  final maps = await db.query('messages', where: where, whereArgs: whereArgs, limit: limit, orderBy: orderby);
 
   if (maps == null) {
     return [];
