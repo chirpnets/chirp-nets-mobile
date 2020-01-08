@@ -1,4 +1,5 @@
 import 'package:chirp_nets/providers/bluetooth.dart';
+import 'package:chirp_nets/utils/text.dart';
 import 'package:chirp_nets/widgets/bluetooth/devices_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -19,7 +20,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
     bluetooth.findDevices().then((res) {
       bluetooth.connectToDevice();
       Fluttertoast.showToast(
-          msg: 'Connecting to device. This may take a minute.');
+          msg: deviceConnectingMessage);
     });
 
     setState(() {
@@ -39,7 +40,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
       appBar: AppBar(
         iconTheme: Theme.of(context).iconTheme,
         title: Text(
-          'Bluetooth Devices',
+          bluetoothTitle,
           style: Theme.of(context).textTheme.title,
         ),
       ),
@@ -66,7 +67,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Device',
+                    deviceTitle,
                     style: Theme.of(context).textTheme.subtitle,
                   ),
                 ],

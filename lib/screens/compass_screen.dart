@@ -1,4 +1,5 @@
 import 'package:chirp_nets/models/user.dart';
+import 'package:chirp_nets/utils/text.dart';
 import 'package:chirp_nets/widgets/compass/compass_widget.dart';
 import 'package:chirp_nets/providers/users.dart';
 import 'package:chirp_nets/widgets/compass/location_card_widget.dart';
@@ -21,7 +22,7 @@ class CompassScreen extends StatelessWidget {
       appBar: AppBar(
         iconTheme: Theme.of(context).iconTheme,
         title: Text(
-          'Relative Locations',
+          compassTitle,
           style: Theme.of(context).textTheme.title,
         ),
       ),

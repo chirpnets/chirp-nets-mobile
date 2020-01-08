@@ -1,4 +1,5 @@
 import 'package:chirp_nets/models/user.dart';
+import 'package:chirp_nets/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:chirp_nets/models/message.dart';
 import 'package:intl/intl.dart';
@@ -10,7 +11,7 @@ class SentMessageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DateFormat formatter = DateFormat('MMM d H:mm'); // r
+    DateFormat formatter = DateFormat(dateFormat);
     String date = formatter.format(message.createdAt);
 
     return Container(

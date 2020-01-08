@@ -1,4 +1,5 @@
 import 'package:chirp_nets/screens/bluetooth_screen.dart';
+import 'package:chirp_nets/utils/text.dart';
 import 'package:flutter/material.dart';
 
 class BluetoothSettingWidget extends StatelessWidget {
@@ -19,7 +20,7 @@ class BluetoothSettingWidget extends StatelessWidget {
         Container(
           width: MediaQuery.of(context).size.width * 0.2,
           child: Text(
-            'Bluetooth Settings',
+            bluetoothSettingsTitle,
             style: Theme.of(context).textTheme.subtitle,
           ),
         ),

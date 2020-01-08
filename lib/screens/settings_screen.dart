@@ -1,5 +1,6 @@
 import 'package:chirp_nets/models/user.dart';
 import 'package:chirp_nets/providers/users.dart';
+import 'package:chirp_nets/utils/text.dart';
 import 'package:chirp_nets/widgets/settings/bluetooth_setting_widget.dart';
 import 'package:chirp_nets/widgets/settings/setting_widget.dart';
 import 'package:chirp_nets/widgets/settings/text_setting_widget.dart';
@@ -32,7 +33,7 @@ class SettingsScreen extends StatelessWidget {
       appBar: AppBar(
         iconTheme: Theme.of(context).iconTheme,
         title: Text(
-          'Settings',
+          settingsTitle,
           style: Theme.of(context).textTheme.title,
         ),
       ),
@@ -40,7 +41,7 @@ class SettingsScreen extends StatelessWidget {
         children: [
           SettingWidget(
             child: TextSettingWidget(
-              title: 'Display Name',
+              title: displayNamePrompt,
               value: name,
               provider: userData,
               object: currentUser,

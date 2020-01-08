@@ -1,4 +1,5 @@
 import 'package:chirp_nets/providers/users.dart';
+import 'package:chirp_nets/utils/text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:location/location.dart';
@@ -18,7 +19,7 @@ class LocationService {
       currentLocation = await location.getLocation();
     } on PlatformException catch (e) {
       if (e.code == 'PERMISSION_DENIED') {
-        var error = 'User denied location permissions';
+        var error = locationPermissionDeniedMessage;
         debugPrint(error);
       }
       currentLocation = null;

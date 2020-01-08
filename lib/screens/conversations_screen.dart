@@ -1,6 +1,7 @@
 import 'package:chirp_nets/providers/users.dart';
 import 'package:chirp_nets/screens/settings_screen.dart';
 import 'package:chirp_nets/utils/location_service.dart';
+import 'package:chirp_nets/utils/text.dart';
 import 'package:chirp_nets/widgets/conversations/add_conversation_widget.dart';
 import 'package:chirp_nets/widgets/conversations/conversations_list_widget.dart';
 import 'package:chirp_nets/widgets/users/add_first_user_widget.dart';
@@ -64,7 +65,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
       appBar: AppBar(
         iconTheme: Theme.of(context).iconTheme,
         title: Text(
-          'Conversations',
+          conversationsTitle,
           style: Theme.of(context).textTheme.title,
         ),
         actions: [

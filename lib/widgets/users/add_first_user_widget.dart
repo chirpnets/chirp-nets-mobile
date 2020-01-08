@@ -1,3 +1,4 @@
+import 'package:chirp_nets/utils/text.dart';
 import 'package:flutter/material.dart';
 
 import 'package:chirp_nets/providers/conversations.dart';
@@ -35,7 +36,7 @@ class AddFirstUserWidget extends StatelessWidget {
           child: Column(
             children: [
               Text(
-                'Enter your name, this will be displayed by your messages.',
+                addUserPrompt,
                 style: Theme.of(context).textTheme.body1,
               ),
               Container(
@@ -52,7 +53,7 @@ class AddFirstUserWidget extends StatelessWidget {
                         decoration: InputDecoration(
                           hintStyle: Theme.of(context).textTheme.body1,
                           hasFloatingPlaceholder: true,
-                          hintText: 'Enter Your Name...',
+                          hintText: namePrompt,
                         ),
                         controller: userTextController,
                       ),
@@ -73,7 +74,7 @@ class AddFirstUserWidget extends StatelessWidget {
                         decoration: InputDecoration(
                           hintStyle: Theme.of(context).textTheme.body1,
                           hasFloatingPlaceholder: true,
-                          hintText: 'Enter Group Name...',
+                          hintText: groupPrompt,
                         ),
                         onSubmitted: (String message) =>
                             createUserAndConversation(

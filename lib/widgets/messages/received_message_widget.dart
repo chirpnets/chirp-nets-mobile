@@ -1,6 +1,7 @@
 import 'package:chirp_nets/models/message.dart';
 import 'package:chirp_nets/models/user.dart';
 import 'package:chirp_nets/providers/users.dart';
+import 'package:chirp_nets/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -12,7 +13,7 @@ class ReceivedMessageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DateFormat formatter = DateFormat('MMM d H:mm');
+    DateFormat formatter = DateFormat(dateFormat);
     String date = formatter.format(message.createdAt);
     Users userProvider = Provider.of<Users>(context);
     String name = userProvider.users[message.sentBy].name;

@@ -3,6 +3,7 @@ import 'package:chirp_nets/models/message.dart';
 import 'package:chirp_nets/models/user.dart';
 import 'package:chirp_nets/providers/messages.dart';
 import 'package:chirp_nets/providers/users.dart';
+import 'package:chirp_nets/utils/text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -77,7 +78,7 @@ class MessageInputWidget extends StatelessWidget {
                 decoration: InputDecoration(
                   hintStyle: Theme.of(context).textTheme.body1,
                   hasFloatingPlaceholder: true,
-                  hintText: 'Say something nice...',
+                  hintText: messagePrompt,
                 ),
                 onSubmitted: (String message) => sendMessage(
                   message,

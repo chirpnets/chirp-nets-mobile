@@ -1,3 +1,4 @@
+import 'package:chirp_nets/utils/text.dart';
 import 'package:flutter/material.dart';
 
 import 'package:chirp_nets/models/conversation.dart';
@@ -59,7 +60,7 @@ class AddConversationWidget extends StatelessWidget {
                 decoration: InputDecoration(
                   hintStyle: Theme.of(context).textTheme.body1,
                   hasFloatingPlaceholder: true,
-                  hintText: 'Enter Group Name...',
+                  hintText: groupPrompt,
                 ),
                 onSubmitted: (String message) => addConversation(
                   conversationData,
