@@ -17,20 +17,33 @@ class ConversationsListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: ListView(
-        children: [
-          ...conversations.values
-              .map(
-                (conversation) => ConversationWidget(
-                  conversation: conversation,
-                  user: currentUser,
-                  conversations: conversationData,
+    List<dynamic> conversationList = conversations.values
+        .map(
+          (conversation) => Container(
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black,
+                  offset: Offset(0.0, 1.0),
+                  blurRadius: 1.0,
                 ),
-              )
-              .toList(),
-        ],
+              ],
+            ),
+            child: ConversationWidget(
+              conversation: conversation,
+              user: currentUser,
+              conversations: conversationData,
+            ),
+          ),
+        )
+        .toList();
+    conversationList.add(
+      Container(
+        child: Image.asset('assets/chirp_logo.png'),
       ),
+    );
+    return ListView(
+      children: conversationList,
     );
   }
 }

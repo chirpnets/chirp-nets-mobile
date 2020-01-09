@@ -18,8 +18,7 @@ class CompassWidget extends StatefulWidget {
   _CompassWidgetState createState() => _CompassWidgetState();
 }
 
-class _CompassWidgetState extends State<CompassWidget>
-    with SingleTickerProviderStateMixin {
+class _CompassWidgetState extends State<CompassWidget> {
   final compass = FlutterCompass();
   double rotationAngle = 0;
 

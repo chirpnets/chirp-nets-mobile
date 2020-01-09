@@ -1,3 +1,4 @@
+import 'package:chirp_nets/utils/text.dart';
 import 'package:flutter/material.dart';
 
 import 'package:chirp_nets/models/conversation.dart';
@@ -47,19 +48,19 @@ class AddConversationWidget extends StatelessWidget {
     }
     return Container(
       child: Card(
-        color: Theme.of(context).accentColor,
+        color: Theme.of(context).primaryColor,
         child: Container(
           padding: EdgeInsets.all(10),
           child: Column(
             children: [
               TextField(
-                style: Theme.of(context).textTheme.body1,
                 autofocus: true,
+                style: Theme.of(context).textTheme.body1,
                 textCapitalization: TextCapitalization.words,
                 decoration: InputDecoration(
                   hintStyle: Theme.of(context).textTheme.body1,
                   hasFloatingPlaceholder: true,
-                  hintText: 'Enter Group Name...',
+                  hintText: groupPrompt,
                 ),
                 onSubmitted: (String message) => addConversation(
                   conversationData,

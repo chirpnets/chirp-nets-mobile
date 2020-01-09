@@ -1,4 +1,6 @@
+import 'package:chirp_nets/providers/messages.dart';
 import 'package:chirp_nets/widgets/common/delete_alert_dialog.dart';
+import 'package:chirp_nets/widgets/conversations/conversation_details_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -7,6 +9,7 @@ import 'package:chirp_nets/models/user.dart';
 import 'package:chirp_nets/providers/conversations.dart';
 import 'package:chirp_nets/screens/messages_screen.dart';
 import 'package:chirp_nets/widgets/conversations/add_conversation_widget.dart';
+import 'package:provider/provider.dart';
 
 class ConversationWidget extends StatelessWidget {
   const ConversationWidget({this.conversation, this.user, this.conversations});
@@ -31,12 +34,20 @@ class ConversationWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Messages messageProvider = Provider.of<Messages>(context);
+    var message = messageProvider.lastMessages[conversation.id];
+    if (message == null) {
+      messageProvider.getLastMessageFromConversation(conversation.id);
+    }
     return Slidable(
       actionExtentRatio: 0.15,
       actionPane: SlidableDrawerActionPane(),
       actions: <Widget>[
         IconSlideAction(
-          icon: Icons.delete,
+          iconWidget: Icon(
+            Icons.delete,
+            color: Theme.of(context).iconTheme.color,
+          ),
           color: Theme.of(context).errorColor,
           onTap: () => showDialog(
             context: context,
@@ -50,35 +61,31 @@ class ConversationWidget extends StatelessWidget {
           icon: Icons.edit,
           color: Theme.of(context).buttonColor,
           onTap: () => showModalBottomSheet(
+            useRootNavigator: true,
             context: context,
-            builder: (ctx) => AddConversationWidget(
-              conversationData: conversations,
-              user: user,
-              conversation: conversation,
+            isScrollControlled: true,
+            builder: (ctx) => SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(Scaffold.of(context).context)
+                      .viewInsets
+                      .bottom,
+                ),
+                child: AddConversationWidget(
+                  conversationData: conversations,
+                  user: user,
+                  conversation: conversation,
+                ),
+              ),
             ),
           ),
         ),
       ],
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Theme.of(context).accentColor,
-        ),
-        margin: EdgeInsets.all(10),
-        padding: EdgeInsets.all(5),
-        child: ListTile(
-          onTap: () => viewMessages(context),
-          leading: CircleAvatar(
-            backgroundColor: Theme.of(context).buttonColor,
-            child: Icon(
-              Icons.person,
-              color: Theme.of(context).iconTheme.color,
-            ),
-          ),
-          title: Text(
-            conversation.name,
-            style: Theme.of(context).textTheme.subtitle,
-          ),
+      child: GestureDetector(
+        onTap: () => viewMessages(context),
+        child: ConversationDetailsWidget(
+          conversation: conversation,
+          message: message,
         ),
       ),
     );

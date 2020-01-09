@@ -3,6 +3,7 @@ import 'package:chirp_nets/models/message.dart';
 import 'package:chirp_nets/models/user.dart';
 import 'package:chirp_nets/providers/messages.dart';
 import 'package:chirp_nets/providers/users.dart';
+import 'package:chirp_nets/utils/text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -10,12 +11,13 @@ class MessageInputWidget extends StatelessWidget {
   final Conversation conversation;
   final Messages messageData;
   final User user;
-  final textController = TextEditingController();
+  final textController;
 
   MessageInputWidget({
     this.conversation,
     this.user,
     this.messageData,
+    this.textController,
   });
 
   void sendMessage(
@@ -48,48 +50,60 @@ class MessageInputWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final Messages messageData = Provider.of<Messages>(context);
     final User user = Provider.of<Users>(context).currentUser;
-
     return Container(
-      padding: EdgeInsets.all(5),
+      height: 60,
+      margin: EdgeInsets.all(10),
+      padding: EdgeInsets.only(left: 10),
+      decoration: BoxDecoration(
+          color: Theme.of(context).primaryColor,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black,
+              offset: Offset(0.0, 3.0),
+              blurRadius: 5.0,
+            ),
+          ]),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 5),
-            width: MediaQuery.of(context).size.width - 100,
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-              borderRadius: BorderRadius.circular(5),
-            ),
-            child: TextField(
-              style: Theme.of(context).textTheme.body1,
-              textCapitalization: TextCapitalization.sentences,
-              decoration: InputDecoration(
-                hintStyle: Theme.of(context).textTheme.body1,
-                hasFloatingPlaceholder: true,
-                hintText: 'Say something nice...',
+          Expanded(
+            flex: 3,
+            child: Container(
+              padding: EdgeInsets.all(5),
+              child: TextField(
+                style: Theme.of(context).textTheme.body1,
+                textCapitalization: TextCapitalization.sentences,
+                decoration: InputDecoration(
+                  hintStyle: Theme.of(context).textTheme.body1,
+                  hasFloatingPlaceholder: true,
+                  hintText: messagePrompt,
+                ),
+                onSubmitted: (String message) => sendMessage(
+                  message,
+                  conversation.id,
+                  user,
+                  messageData,
+                ),
+                controller: textController,
               ),
-              onSubmitted: (String message) => sendMessage(
-                message,
-                conversation.id,
-                user,
-                messageData,
-              ),
-              controller: textController,
             ),
           ),
-          Container(
-            child: FlatButton(
-              color: Theme.of(context).buttonColor,
-              child: Icon(
-                Icons.send,
-                color: Theme.of(context).iconTheme.color,
-              ),
-              onPressed: () => sendMessage(
-                textController.text,
-                conversation.id,
-                user,
-                messageData,
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.only(right: 5),
+              child: FlatButton(
+                child: Icon(
+                  Icons.send,
+                ),
+                color: Theme.of(context).primaryColor,
+                onPressed: () => sendMessage(
+                  textController.text,
+                  conversation.id,
+                  user,
+                  messageData,
+                ),
               ),
             ),
           ),

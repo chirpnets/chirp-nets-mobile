@@ -14,7 +14,25 @@ class Users with ChangeNotifier {
     return {..._users};
   }
 
-  void init() async {
+  Future<int> addUser(String name, {bool isCurrentUser = false}) async {
+    User user = User(name: name, isCurrentUser: isCurrentUser);
+    int id = await create(table: 'users', object: user);
+    _users.putIfAbsent(
+      id,
+      () => User(
+        id: id,
+        name: name,
+        isCurrentUser: isCurrentUser,
+      ),
+    );
+    if (isCurrentUser) {
+      _currentUser = _users[id];
+    }
+    notifyListeners();
+    return id;
+  }
+
+  Future init() async {
     List<User> users = await getUsers();
     for (User user in users) {
       if (user.isCurrentUser) {
@@ -24,6 +42,17 @@ class Users with ChangeNotifier {
         user.id,
         () => user,
       );
+    }
+    if (_currentUser == null) {
+      addUser('', isCurrentUser: true).then((id) {
+        _users.putIfAbsent(
+          id,
+          () => User(
+            name: '',
+            isCurrentUser: true,
+          ),
+        );
+      });
     }
     notifyListeners();
   }
@@ -37,32 +66,16 @@ class Users with ChangeNotifier {
         isCurrentUser: oldUser.isCurrentUser,
       ),
     );
-    update(table: 'users', object: _users[id]);
-    notifyListeners();
-  }
-
-  Future<int> addUser(String name, {bool isCurrentUser = false}) async {
-    User user = User(name: name, isCurrentUser: isCurrentUser);
-    int id = await create(table: 'users', object: user);
-    _users.putIfAbsent(
-      id,
-      () => User(
-        id: id,
-        name: name,
-        isCurrentUser: isCurrentUser,
-      ),
-    );
-    if(isCurrentUser) {
+    if (_users[id].isCurrentUser) {
       _currentUser = _users[id];
     }
+    update(table: 'users', object: _users[id]);
     notifyListeners();
-    return id;
   }
 
   User get currentUser {
     return _currentUser;
   }
-
 
   void deleteUser(int id) {
     delete(table: 'users', id: id);
@@ -85,10 +98,10 @@ class Users with ChangeNotifier {
     notifyListeners();
   }
 
-  List<Map<String, dynamic>> getUsersLocations() {
+  static List<Map<String, dynamic>> getUsersLocations({Map<int,User> users}) {
     List<Map<String, dynamic>> userLocations = [];
-    for (var user in _users.values) {
-      if (!user.isCurrentUser) {
+    for (var user in users.values) {
+      if (!user.isCurrentUser && user.latitude != null) {
         userLocations.add({
           'latitude': user.latitude,
           'longitude': user.longitude,

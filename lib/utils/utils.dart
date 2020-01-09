@@ -21,3 +21,5 @@ double getDistanceBetweenPoints(
   var c = 2 * atan2(sqrt(a), sqrt(1 - a));
   return radius * c;
 }
+
+const String dateFormat = 'MMM d H:mm';

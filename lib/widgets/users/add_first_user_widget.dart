@@ -1,14 +1,22 @@
+import 'package:chirp_nets/utils/text.dart';
 import 'package:flutter/material.dart';
 
 import 'package:chirp_nets/providers/conversations.dart';
 import 'package:chirp_nets/providers/users.dart';
 
 class AddFirstUserWidget extends StatelessWidget {
-  void createUserAndConversation(name, Users users, conversationName,
-      Conversations conversations, BuildContext ctx) async {
-    int id = await users.addUser(name, isCurrentUser: true);
-    conversations.addConversation(id, conversationName);
-    Navigator.of(ctx).pop();
+  void createUserAndConversation(
+      String name,
+      Users users,
+      String conversationName,
+      Conversations conversations,
+      BuildContext ctx) async {
+    if (name.isNotEmpty && conversationName.isNotEmpty) {
+      int id = users.currentUser.id;
+      users.updateUser(id, name);
+      conversations.addConversation(id, conversationName);
+      Navigator.of(ctx).pop();
+    }
   }
 
   AddFirstUserWidget({this.userData, this.conversationData});
@@ -22,13 +30,13 @@ class AddFirstUserWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Card(
-        color: Theme.of(context).accentColor,
+        color: Theme.of(context).primaryColor,
         child: Container(
           padding: EdgeInsets.all(10),
           child: Column(
             children: [
               Text(
-                'Enter your name, this will be displayed by your messages.',
+                addUserPrompt,
                 style: Theme.of(context).textTheme.body1,
               ),
               Container(
@@ -39,13 +47,13 @@ class AddFirstUserWidget extends StatelessWidget {
                     Container(
                       width: MediaQuery.of(context).size.width * 0.6,
                       child: TextField(
-                        style: Theme.of(context).textTheme.body1,
                         autofocus: true,
+                        style: Theme.of(context).textTheme.body1,
                         textCapitalization: TextCapitalization.words,
                         decoration: InputDecoration(
                           hintStyle: Theme.of(context).textTheme.body1,
                           hasFloatingPlaceholder: true,
-                          hintText: 'Enter Your Name...',
+                          hintText: namePrompt,
                         ),
                         controller: userTextController,
                       ),
@@ -62,12 +70,11 @@ class AddFirstUserWidget extends StatelessWidget {
                       width: MediaQuery.of(context).size.width * 0.6,
                       child: TextField(
                         style: Theme.of(context).textTheme.body1,
-                        autofocus: true,
                         textCapitalization: TextCapitalization.words,
                         decoration: InputDecoration(
                           hintStyle: Theme.of(context).textTheme.body1,
                           hasFloatingPlaceholder: true,
-                          hintText: 'Enter Group Name...',
+                          hintText: groupPrompt,
                         ),
                         onSubmitted: (String message) =>
                             createUserAndConversation(
