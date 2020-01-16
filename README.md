@@ -18,5 +18,5 @@ flutter run
 ## Application design 
 
 https://github.com/MRoym/chat-app-design
-Design by Micheal Mather.
+Design by Michael Mather.
 https://github.com/MRoym
