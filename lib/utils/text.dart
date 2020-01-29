@@ -20,10 +20,14 @@ const String displayNamePrompt = 'Display Name';
 
 const String deviceTitle = 'Device';
 
-const String deviceName = '';
+const String deviceName = 'Bluefruit52';
 
 const String deviceConnectingMessage = 'Connecting to device. This may take a minute.';
+
+const String deviceConnectedMessage = 'Device Connected';
 
 const String locationPermissionDeniedMessage = 'User denied location permissions';
 
 const String bluetoothTitle = 'Bluetooth Devices';
+
+const String messageSentBy = 'You';

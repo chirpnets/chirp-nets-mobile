@@ -31,11 +31,13 @@ class SettingsScreen extends StatelessWidget {
     var name = currentUser == null ? '' : currentUser.name;
     return Scaffold(
       appBar: AppBar(
+        elevation: 0.0,
         iconTheme: Theme.of(context).iconTheme,
         title: Text(
           settingsTitle,
           style: Theme.of(context).textTheme.title,
         ),
+        backgroundColor: Theme.of(context).canvasColor,
       ),
       body: ListView(
         children: [

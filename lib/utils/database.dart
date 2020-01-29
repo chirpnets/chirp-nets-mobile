@@ -13,6 +13,7 @@ final Map<int, List<String>> migrations = {
     "CREATE TABLE messages(id INTEGER PRIMARY KEY, conversationId INTEGER, message TEXT, createdAt TEXT, FOREIGN KEY(conversationId) REFERENCES conversations(id) ON DELETE CASCADE);",
     "ALTER TABLE devices ADD COLUMN name;",
     "ALTER TABLE messages ADD COLUMN sentBy INTEGER; ALTER TABLE messages add FOREIGN KEY(sentBy) REFERENCES users(id)",
+    "ALTER TABLE messages ADD COLUMN isRead INTEGER;",
   ]
 };
 
@@ -148,6 +149,7 @@ Future<List<Message>> getMessages({where, whereArgs, limit, orderby='id DESC'}) 
       conversationId: maps[i]['conversationId'],
       createdAt: DateTime.tryParse(maps[i]['createdAt']),
       sentBy: maps[i]['sentBy'],
+      isRead: maps[i]['isRead'] > 0 ? true : false,
     );
   });
 }

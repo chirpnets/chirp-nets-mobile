@@ -111,4 +111,11 @@ class Users with ChangeNotifier {
     }
     return userLocations;
   }
+
+  User getUser({int id}) {
+    User user = _users.values.toList().firstWhere((user){
+      return user.id == id;
+    });
+    return user;
+  }
 }

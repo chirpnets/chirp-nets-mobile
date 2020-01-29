@@ -1,3 +1,4 @@
+import 'package:chirp_nets/providers/bluetooth.dart';
 import 'package:chirp_nets/providers/users.dart';
 import 'package:chirp_nets/screens/settings_screen.dart';
 import 'package:chirp_nets/utils/location_service.dart';
@@ -53,6 +54,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Bluetooth bluetooth = Provider.of<Bluetooth>(context);
     userData = Provider.of<Users>(context);
     if (service == null) {
       service = LocationService(userData);
@@ -63,12 +65,23 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
+        elevation: 0.0,
         iconTheme: Theme.of(context).iconTheme,
         title: Text(
           conversationsTitle,
           style: Theme.of(context).textTheme.title,
         ),
+        backgroundColor: Colors.transparent,
         actions: [
+          FlatButton(
+            onPressed: () => bluetooth.findDevices(),
+            child: Icon(
+              bluetooth.device != null
+                  ? Icons.bluetooth_connected
+                  : Icons.bluetooth_searching,
+              color: Theme.of(context).iconTheme.color,
+            ),
+          ),
           FlatButton(
             onPressed: () =>
                 Navigator.of(context).pushNamed(SettingsScreen.routeName),
@@ -87,10 +100,10 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Theme.of(context).buttonColor,
+        backgroundColor: Theme.of(context).accentColor,
         child: Icon(
           Icons.add,
-          color: Theme.of(context).iconTheme.color,
+          color: Theme.of(context).highlightColor,
         ),
         tooltip: 'Add Conversation',
         onPressed: () => getBottomSheet(context, conversationData),

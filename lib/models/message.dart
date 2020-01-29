@@ -6,13 +6,16 @@ class Message implements Model {
   final int conversationId;
   final String message;
   final DateTime createdAt;
+  final bool isRead;
 
-  Message(
-      {this.id,
-      this.message,
-      this.conversationId,
-      this.createdAt,
-      this.sentBy});
+  Message({
+    this.id,
+    this.message,
+    this.conversationId,
+    this.createdAt,
+    this.sentBy,
+    this.isRead = false,
+  });
 
   @override
   Map<String, dynamic> toMap() {
@@ -21,6 +24,7 @@ class Message implements Model {
       'conversationId': conversationId,
       'message': message,
       'createdAt': createdAt.toString(),
+      'isRead': isRead,
     };
   }
 }

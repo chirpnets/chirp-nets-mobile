@@ -36,7 +36,7 @@ class TextSettingWidget extends StatelessWidget {
             color: Theme.of(context).buttonColor,
             child: Icon(
               Icons.save,
-              color: Theme.of(context).iconTheme.color,
+              color: Theme.of(context).highlightColor,
             ),
             onPressed: () => callback(controller.text, provider, object))
       ],

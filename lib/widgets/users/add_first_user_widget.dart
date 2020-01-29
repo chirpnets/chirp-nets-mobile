@@ -30,7 +30,7 @@ class AddFirstUserWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Card(
-        color: Theme.of(context).primaryColor,
+        color: Theme.of(context).accentColor,
         child: Container(
           padding: EdgeInsets.all(10),
           child: Column(

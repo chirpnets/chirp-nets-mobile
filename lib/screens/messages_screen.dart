@@ -28,10 +28,13 @@ class MessagesScreen extends StatelessWidget {
     users.removeWhere((id, user) => !userIds.contains(id));
     return Scaffold(
       appBar: AppBar(
+        elevation: 0.0,
+        iconTheme: Theme.of(context).iconTheme,
         title: Text(
           conversation.name,
           style: Theme.of(context).textTheme.title,
         ),
+        backgroundColor: Theme.of(context).canvasColor,
         actions: [
           FlatButton(
             onPressed: () => Navigator.of(context).pushNamed(
@@ -41,7 +44,7 @@ class MessagesScreen extends StatelessWidget {
               },
             ),
             child: Icon(
-              Icons.my_location,
+              Icons.location_on,
               color: Theme.of(context).iconTheme.color,
             ),
           ),

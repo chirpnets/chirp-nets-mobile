@@ -26,22 +26,22 @@ class DeleteAlertDialog extends StatelessWidget {
     return AlertDialog(
       title: Text(
         title,
-        style: Theme.of(context).textTheme.title,
+        style: Theme.of(context).textTheme.subhead,
       ),
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: Theme.of(context).accentColor,
       actions: [
         RaisedButton(
           child: Text(
             confirmText,
-            style: Theme.of(context).textTheme.body2,
+            style: Theme.of(context).textTheme.body1,
           ),
           color: Theme.of(context).errorColor,
-          onPressed: () => {confirm(context, id)},
+          onPressed: () => confirm(context, id),
         ),
         RaisedButton(
           child: Text(
             cancelText,
-            style: Theme.of(context).textTheme.body2,
+            style: Theme.of(context).textTheme.body1,
           ),
           color: Theme.of(context).accentColor,
           onPressed: () => Navigator.of(context).pop(),
