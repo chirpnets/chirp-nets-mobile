@@ -10,9 +10,9 @@ import 'package:provider/provider.dart';
 class ReceivedMessageWidget extends StatelessWidget {
   final Message message;
   final User currentUser;
-  final bool newMessageGroup;
+  final bool sameMessageGroup;
   ReceivedMessageWidget(
-      {Key key, this.message, this.currentUser, this.newMessageGroup});
+      {Key key, this.message, this.currentUser, this.sameMessageGroup});
 
   @override
   Widget build(BuildContext context) {
@@ -23,20 +23,20 @@ class ReceivedMessageWidget extends StatelessWidget {
     var width = MediaQuery.of(context).size.width * 0.5;
     return Container(
       width: width,
-      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+      margin: EdgeInsets.only(top: 22, bottom: 5, left: 10, right: 10),
       padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: Colors.black,
-            offset: Offset(0.0, 1.0),
-            blurRadius: 2.0,
+            color: Colors.black.withOpacity(0.2),
+            offset: Offset(0.0, 1),
+            blurRadius: 1.0,
           ),
         ],
         borderRadius: BorderRadius.only(
           bottomLeft:
-              newMessageGroup ? Radius.circular(3) : Radius.circular(10),
-          topLeft: newMessageGroup ? Radius.circular(10) : Radius.circular(3),
+              sameMessageGroup ? Radius.circular(10) : Radius.circular(3),
+          topLeft: sameMessageGroup ? Radius.circular(3) : Radius.circular(10),
           topRight: Radius.circular(10),
           bottomRight: Radius.circular(10),
         ),
@@ -44,7 +44,7 @@ class ReceivedMessageWidget extends StatelessWidget {
       ),
       child: MessageWidget(
         isSent: false,
-        newMessageGroup: newMessageGroup,
+        sameMessageGroup: !sameMessageGroup,
         name: name,
         date: date,
         message: message,

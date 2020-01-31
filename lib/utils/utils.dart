@@ -57,3 +57,10 @@ int getChecksum(List<int> message) {
   }
   return ~checksum;
 }
+
+bool validateChecksum(int recievedChecksum, List<int> message) {
+  // print(recievedChecksum);
+  // print(message);
+  int checksum = getChecksum([33, ...message]);
+  return checksum == recievedChecksum;
+}

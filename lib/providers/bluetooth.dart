@@ -1,4 +1,5 @@
 import 'package:chirp_nets/models/message.dart';
+import 'package:chirp_nets/providers/messages.dart';
 import 'package:chirp_nets/utils/text.dart';
 import 'package:chirp_nets/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ class Bluetooth with ChangeNotifier {
   BluetoothCharacteristic txCharacteristic;
   BluetoothCharacteristic rxCharacteristic;
   BluetoothService service;
+  Messages messageProvider;
   bool isScanning = false;
   var scanSubscription;
   var uartServiceUUID = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";
@@ -32,7 +34,6 @@ class Bluetooth with ChangeNotifier {
     print('finding devices');
 
     scanSubscription = _flutterBlue.scanResults.listen((scanResults) {
-      // do something with scan result
       for (var device in scanResults) {
         if (device.device.name == deviceName) {
           print('Device found');
@@ -70,9 +71,11 @@ class Bluetooth with ChangeNotifier {
             print('tx');
             txCharacteristic = c;
             txCharacteristic.value.listen((value) {
-              if (txCharacteristic.isNotifying) {
-                print(value.toString());
-              }
+              // if (txCharacteristic.isNotifying) {
+                if (value.length > 0) {
+                  messageProvider.recieveMessage(value);
+                }
+              // }
             });
           }
           if (c.uuid.toString() == rxUUID) {

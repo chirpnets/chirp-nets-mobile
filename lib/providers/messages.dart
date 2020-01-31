@@ -1,10 +1,14 @@
 import 'package:chirp_nets/models/message.dart';
+import 'package:chirp_nets/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:chirp_nets/utils/database.dart';
+import 'package:chirp_nets/utils/utils.dart';
+import 'users.dart';
 
 class Messages with ChangeNotifier {
   Map<int, Message> _messages = {};
   int _conversationId;
+  Users users;
   Map<int, Message> _lastMessages = {};
 
   Map<int, Message> get messages {
@@ -22,7 +26,9 @@ class Messages with ChangeNotifier {
   void getMessagesFromConversation({int conversationId}) async {
     List<Message> messages;
     messages = await getMessages(
-        where: 'conversationId = ?', whereArgs: [conversationId]);
+      where: 'conversationId = ?',
+      whereArgs: [conversationId],
+    );
     _conversationId = conversationId;
     _messages = {for (var message in messages) message.id: message};
     notifyListeners();
@@ -82,5 +88,16 @@ class Messages with ChangeNotifier {
     var lastMessage = message.isEmpty ? Message() : message[0];
     _lastMessages.putIfAbsent(conversationId, () => lastMessage);
     notifyListeners();
+  }
+
+  void recieveMessage(List<int> listMessage) {
+    List<int> recievedMessage = listMessage.sublist(1, listMessage.length - 1);
+    int checksum = listMessage.last;
+    if (!validateChecksum(checksum, recievedMessage)) {
+      debugPrint('Checksum incorrect');
+    }
+    User user = users.getOrCreate(name: 'Becky');
+    String parsedMessage = parseMessage(recievedMessage);
+    addMessage(user.id, _conversationId, parsedMessage, DateTime.now());
   }
 }

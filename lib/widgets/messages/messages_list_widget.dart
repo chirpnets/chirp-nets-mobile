@@ -36,12 +36,9 @@ class MessagesListWidget extends StatelessWidget {
                 ...messages.map(
                   (message) {
                     int index = messages.indexOf(message);
-                    bool newMessageGroup = false;
-                    if (index < messages.length-1 && message.sentBy == messages[index+1].sentBy && message.createdAt.difference(messages[index+1].createdAt).inMinutes >= 20) {
-                      newMessageGroup = true;
-                    }
-                    else if (index == messages.length-1) {
-                      newMessageGroup = true;
+                    bool sameMessageGroup = false;
+                    if (index == messages.length - 1 || (index < messages.length - 1 && (message.sentBy != messages[index+1].sentBy || message.createdAt.difference(messages[index+1].createdAt).inMinutes >= 20))) {
+                      sameMessageGroup = true;
                     }
                     if (message.sentBy == user.id) {
                       return Row(
@@ -50,7 +47,7 @@ class MessagesListWidget extends StatelessWidget {
                           SentMessageWidget(
                             message: message,
                             user: user,
-                            newMessageGroup: newMessageGroup,
+                            sameMessageGroup: sameMessageGroup,
                           ),
                         ],
                       );
@@ -61,7 +58,7 @@ class MessagesListWidget extends StatelessWidget {
                           ReceivedMessageWidget(
                             message: message,
                             currentUser: user,
-                            newMessageGroup: newMessageGroup,
+                            sameMessageGroup: sameMessageGroup,
                           ),
                         ],
                       );

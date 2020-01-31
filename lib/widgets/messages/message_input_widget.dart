@@ -74,7 +74,11 @@ class MessageInputWidget extends StatelessWidget {
           Expanded(
             flex: 3,
             child: Container(
+              padding: EdgeInsets.only(bottom: 3, top: 5),
               child: TextField(
+                maxLengthEnforced: true,
+                maxLength: 120,
+                maxLines: null,
                 style: Theme.of(context).textTheme.body1,
                 textCapitalization: TextCapitalization.sentences,
                 decoration: InputDecoration.collapsed(

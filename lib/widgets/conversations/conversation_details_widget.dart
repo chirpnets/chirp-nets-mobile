@@ -1,9 +1,7 @@
 import 'package:chirp_nets/models/conversation.dart';
 import 'package:chirp_nets/models/message.dart';
-import 'package:chirp_nets/providers/messages.dart';
 import 'package:chirp_nets/providers/users.dart';
 import 'package:chirp_nets/utils/utils.dart';
-import 'package:chirp_nets/widgets/users/bubble_group_widget.dart';
 import 'package:chirp_nets/widgets/users/bubble_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -24,8 +22,6 @@ class ConversationDetailsWidget extends StatelessWidget {
     String dateText = '';
     String displayName = '';
     Users userProvider = Provider.of<Users>(context);
-    Messages messageProvider = Provider.of<Messages>(context);
-    int userCount = messageProvider.getUserIds().length;
     String bubbleChars = '';
     if (message != null && message.message != null) {
       displayMessage = message.message.length < 40
@@ -56,7 +52,7 @@ class ConversationDetailsWidget extends StatelessWidget {
                       children: [
                         Container(
                           constraints: BoxConstraints(
-                            maxWidth: MediaQuery.of(context).size.width*0.40,
+                            maxWidth: MediaQuery.of(context).size.width * 0.40,
                           ),
                           alignment: Alignment.centerLeft,
                           child: Text(
@@ -74,14 +70,10 @@ class ConversationDetailsWidget extends StatelessWidget {
                         ),
                         Container(
                           alignment: Alignment.bottomRight,
-                          child: userCount <= 2
-                              ? BubbleWidget(
-                                  hint: bubbleChars,
-                                )
-                              : BubbleGroupWidget(
-                                  hint: bubbleChars,
-                                  userCount: userCount - 2,
-                                ),
+                          child: BubbleWidget(
+                            colourIndex: message != null ? message.sentBy % 6 : null,
+                            hint: bubbleChars,
+                          ),
                         ),
                       ],
                     ),

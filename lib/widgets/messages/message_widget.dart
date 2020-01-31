@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 class MessageWidget extends StatelessWidget {
   const MessageWidget({
     Key key,
-    this.newMessageGroup,
+    this.sameMessageGroup,
     this.name,
     this.date,
     this.isSent,
     this.message,
   }) : super(key: key);
 
-  final bool newMessageGroup;
+  final bool sameMessageGroup;
   final String name;
   final String date;
   final bool isSent;
@@ -25,21 +25,22 @@ class MessageWidget extends StatelessWidget {
     if (isSent) {
       offset = Offset(width * 0.95, -25);
     } else {
-      offset = Offset(-25, -25);
+      offset = Offset(-17, -27);
     }
     return Stack(
       children: [
-        if (newMessageGroup)
+        if (!sameMessageGroup && !isSent)
           Transform.translate(
             offset: offset,
             child: BubbleWidget(
-              hint: name[0],
+              colourIndex: message.sentBy % 6,
+              hint: name.length > 0 ? name[0] : '',
             ),
           ),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (newMessageGroup)
+            if (!sameMessageGroup)
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -62,7 +63,7 @@ class MessageWidget extends StatelessWidget {
                 ],
               ),
             Container(
-              padding: newMessageGroup
+              padding: sameMessageGroup
                   ? EdgeInsets.only(top: 10)
                   : EdgeInsets.all(2),
               child: Text(

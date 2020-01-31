@@ -6,6 +6,7 @@ class User implements Model {
   final bool isCurrentUser;
   final String longitude;
   final String latitude;
+  int colourIndex;
 
   User({
     this.id,

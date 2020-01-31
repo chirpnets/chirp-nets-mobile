@@ -21,7 +21,7 @@ dependencies:
     sdk: flutter
   sqflite: ^1.1.7+1
   path: 
-  flutter_blue: 0.6.2
+  flutter_blue: ^0.6.3
   provider: ^3.1.0+1
   flutter_slidable: ^0.5.4
   fluttertoast: ^3.1.3
