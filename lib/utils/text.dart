@@ -31,3 +31,5 @@ const String locationPermissionDeniedMessage = 'User denied location permissions
 const String bluetoothTitle = 'Bluetooth Devices';
 
 const String messageSentBy = 'You';
+
+const String errorSendingMessageText = 'Bluetooth device not connected. Please connect device and try again.';

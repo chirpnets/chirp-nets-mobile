@@ -38,13 +38,15 @@ class MessageInputWidget extends StatelessWidget {
       conversationId: conversationId,
       sentBy: user.id,
     );
-    messageProvider.addMessage(
-      messageObject.sentBy,
-      messageObject.conversationId,
-      messageObject.message,
-      messageObject.createdAt,
-    );
-    bluetooth.sendMessage(messageObject);
+    bool success = bluetooth.sendMessage(messageObject);
+    if (success) {
+      messageProvider.addMessage(
+        messageObject.sentBy,
+        messageObject.conversationId,
+        messageObject.message,
+        messageObject.createdAt,
+      );
+    }
     textController.clear();
   }
 

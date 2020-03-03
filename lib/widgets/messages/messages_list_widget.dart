@@ -23,7 +23,7 @@ class MessagesListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Message> messages = messageData.getList();
+    List<Message> messages = messageData.getList(conversation.id);
     return Expanded(
       child: LayoutBuilder(
         builder: (BuildContext ctx, constraints) {

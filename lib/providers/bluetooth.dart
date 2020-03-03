@@ -31,6 +31,7 @@ class Bluetooth with ChangeNotifier {
       _flutterBlue.startScan(timeout: Duration(seconds: 4));
       isScanning = true;
     }
+
     print('finding devices');
 
     scanSubscription = _flutterBlue.scanResults.listen((scanResults) {
@@ -45,11 +46,11 @@ class Bluetooth with ChangeNotifier {
           notifyListeners();
         }
         if (_device != null) {
+          isScanning = false;
           break;
         }
       }
     });
-    scanSubscription.onDone(() => isScanning = false);
   }
 
   void cancelScan() {
@@ -68,19 +69,16 @@ class Bluetooth with ChangeNotifier {
         var characteristics = service.characteristics;
         for (BluetoothCharacteristic c in characteristics) {
           if (c.uuid.toString() == txUUID) {
-            print('tx');
             txCharacteristic = c;
-            txCharacteristic.value.listen((value) {
-              // if (txCharacteristic.isNotifying) {
-                if (value.length > 0) {
-                  messageProvider.recieveMessage(value);
-                }
-              // }
-            });
           }
           if (c.uuid.toString() == rxUUID) {
-            print('rx');
             rxCharacteristic = c;
+            rxCharacteristic.setNotifyValue(true);
+            rxCharacteristic.value.listen((value) {
+              if (value.length > 0) {
+                messageProvider.recieveMessage(value);
+              }
+            });
           }
         }
       },
@@ -95,10 +93,18 @@ class Bluetooth with ChangeNotifier {
     notifyListeners();
   }
 
-  void sendMessage(Message message) async {
+  bool sendMessage(Message message) {
+    if (txCharacteristic == null) {
+      Fluttertoast.showToast(
+        msg: errorSendingMessageText,
+      );
+      return false;
+    }
+
     List<int> encoded = new List<int>.from(encodeMessage(message.message));
     encoded.insert(0, 33);
     int checksum = getChecksum(encoded);
     txCharacteristic.write([...encoded, checksum]);
+    return true;
   }
 }

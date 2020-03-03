@@ -71,7 +71,7 @@ class ConversationDetailsWidget extends StatelessWidget {
                         Container(
                           alignment: Alignment.bottomRight,
                           child: BubbleWidget(
-                            colourIndex: message != null ? message.sentBy % 6 : null,
+                            colourIndex: message != null && message.sentBy != null ? message.sentBy % 6 : null,
                             hint: bubbleChars,
                           ),
                         ),

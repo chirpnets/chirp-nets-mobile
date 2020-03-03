@@ -2,6 +2,7 @@ import 'package:chirp_nets/providers/bluetooth.dart';
 import 'package:chirp_nets/providers/users.dart';
 import 'package:chirp_nets/screens/settings_screen.dart';
 import 'package:chirp_nets/utils/location_service.dart';
+import 'package:chirp_nets/utils/notifications.dart';
 import 'package:chirp_nets/utils/text.dart';
 import 'package:chirp_nets/widgets/conversations/add_conversation_widget.dart';
 import 'package:chirp_nets/widgets/conversations/conversations_list_widget.dart';
@@ -11,6 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:chirp_nets/models/conversation.dart';
 import 'package:chirp_nets/models/user.dart';
 import 'package:chirp_nets/providers/conversations.dart';
+
 
 class ConversationsScreen extends StatefulWidget {
   ConversationsScreen();
@@ -26,6 +28,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
   @override
   void initState() {
     super.initState();
+    setupNotifications();
   }
 
   void getBottomSheet(context, conversationData) {

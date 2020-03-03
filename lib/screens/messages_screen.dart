@@ -20,10 +20,7 @@ class MessagesScreen extends StatelessWidget {
     final Conversation conversation = routeArgs['conversation'];
     final Messages messageData = Provider.of<Messages>(context);
     final Users userProvider = Provider.of<Users>(context);
-    if (messageData.conversationId != conversation.id) {
-      messageData.getMessagesFromConversation(conversationId: conversation.id);
-    }
-    List<int> userIds = messageData.getUserIds();
+    List<int> userIds = messageData.getUserIds(conversation.id);
     var users = userProvider.users;
     users.removeWhere((id, user) => !userIds.contains(id));
     return Scaffold(
