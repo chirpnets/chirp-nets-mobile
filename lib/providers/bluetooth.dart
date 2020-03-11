@@ -28,7 +28,7 @@ class Bluetooth with ChangeNotifier {
       return;
     }
     if (!isScanning) {
-      _flutterBlue.startScan(timeout: Duration(seconds: 4));
+      _flutterBlue.startScan(timeout: Duration(seconds: 30));
       isScanning = true;
     }
 
@@ -36,10 +36,10 @@ class Bluetooth with ChangeNotifier {
 
     scanSubscription = _flutterBlue.scanResults.listen((scanResults) {
       for (var device in scanResults) {
-        if (device.device.name == deviceName) {
+        if (device.device.name == deviceName && _device == null) {
           print('Device found');
           _device = device.device;
-          _device.connect(autoConnect: false).then((_) {
+          _device.connect(autoConnect: true).then((_) {
             Fluttertoast.showToast(msg: deviceConnectedMessage);
             discoverServices();
           });
@@ -100,11 +100,8 @@ class Bluetooth with ChangeNotifier {
       );
       return false;
     }
-
     List<int> encoded = new List<int>.from(encodeMessage(message.message));
-    encoded.insert(0, 33);
-    int checksum = getChecksum(encoded);
-    txCharacteristic.write([...encoded, checksum]);
+    txCharacteristic.write([...encoded]);
     return true;
   }
 }

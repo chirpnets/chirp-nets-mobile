@@ -7,17 +7,16 @@ import 'package:chirp_nets/utils/utils.dart';
 import 'users.dart';
 
 class Messages with ChangeNotifier {
+  Messages() {
+    retrieveMessagesFromAllConversations();
+  }
+  
   Map<int, List<Message>> _messages = {};
-  int _conversationId;
   Users users;
   Map<int, Message> _lastMessages = {};
 
   Map<int, List<Message>> get messages {
     return {..._messages};
-  }
-
-  int get conversationId {
-    return _conversationId;
   }
 
   Map<int, Message> get lastMessages {
@@ -31,14 +30,18 @@ class Messages with ChangeNotifier {
     return [];
   }
 
-  void retrieveMessagesFromConversation({int conversationId}) async {
+  void retrieveMessagesFromAllConversations() async {
     List<Message> messages;
-    messages = await getMessages(
-      where: 'conversationId = ?',
-      whereArgs: [conversationId],
-    );
-    _conversationId = conversationId;
-    _messages[conversationId] = messages;
+    messages = await getMessages();
+    for (Message message in messages) {
+      if (_messages[message.conversationId] == null) {
+        _messages[message.conversationId] = [message];
+      } else {
+        if (!_messages[message.conversationId].contains(message)) {
+          _messages[message.conversationId].add(message);
+        }
+      }
+    }
     notifyListeners();
   }
 
@@ -102,14 +105,14 @@ class Messages with ChangeNotifier {
   }
 
   void recieveMessage(List<int> listMessage) {
-    List<int> recievedMessage = listMessage.sublist(1, listMessage.length - 1);
-    int checksum = listMessage.last;
-    if (!validateChecksum(checksum, recievedMessage)) {
-      debugPrint('Checksum incorrect');
-    }
+    List<int> recievedMessage = listMessage.sublist(0, listMessage.length - 1);
+    // int checksum = listMessage.last;
+    // if (!validateChecksum(checksum, recievedMessage)) {
+    //   debugPrint('Checksum incorrect');
+    // }
     User user = users.getOrCreate(name: 'Becky');
     String parsedMessage = parseMessage(recievedMessage);
-    addMessage(user.id, _conversationId, parsedMessage, DateTime.now());
+    addMessage(user.id, 1, parsedMessage, DateTime.now());
     showNotification(0, '${user.name}', '$parsedMessage', '$parsedMessage');
   }
 }

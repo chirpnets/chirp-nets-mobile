@@ -43,7 +43,9 @@ String getTimeSinceMessage(DateTime time) {
 }
 
 String parseMessage(List<int> message) {
-  return AsciiDecoder().convert(message);
+  int index = message.indexOf(0);
+  List<int> recievedMessage = message.sublist(0, index - 1);
+  return AsciiDecoder().convert(recievedMessage);
 }
 
 List<int> encodeMessage(String message) {
@@ -59,8 +61,6 @@ int getChecksum(List<int> message) {
 }
 
 bool validateChecksum(int recievedChecksum, List<int> message) {
-  // print(recievedChecksum);
-  // print(message);
-  int checksum = getChecksum([33, ...message]);
+  int checksum = getChecksum([...message]);
   return checksum == recievedChecksum;
 }
