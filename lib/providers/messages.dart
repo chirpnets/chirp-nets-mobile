@@ -10,7 +10,7 @@ class Messages with ChangeNotifier {
   Messages() {
     retrieveMessagesFromAllConversations();
   }
-  
+
   Map<int, List<Message>> _messages = {};
   Users users;
   Map<int, Message> _lastMessages = {};
@@ -112,7 +112,10 @@ class Messages with ChangeNotifier {
     // }
     User user = users.getOrCreate(name: 'Becky');
     String parsedMessage = parseMessage(recievedMessage);
-    addMessage(user.id, 1, parsedMessage, DateTime.now());
-    showNotification(0, '${user.name}', '$parsedMessage', '$parsedMessage');
+    print(parsedMessage);
+    if (parsedMessage != '') {
+      addMessage(user.id, 1, parsedMessage, DateTime.now());
+      showNotification(0, '${user.name}', '$parsedMessage', '$parsedMessage');
+    }
   }
 }

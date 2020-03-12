@@ -22,9 +22,13 @@ const String deviceTitle = 'Device';
 
 const String deviceName = 'Bluefruit52';
 
-const String deviceConnectingMessage = 'Connecting to device. This may take a minute.';
+const String deviceConnectingMessage = 'Connecting to device.';
 
-const String deviceConnectedMessage = 'Device Connected';
+const String deviceDisconnectedMessage = 'Device disconnected';
+
+const String deviceDisconnectedNotification = 'You will not receive messages unless connected to the Chirp Nets device.';
+
+const String deviceConnectedMessage = 'Device connected';
 
 const String locationPermissionDeniedMessage = 'User denied location permissions';
 

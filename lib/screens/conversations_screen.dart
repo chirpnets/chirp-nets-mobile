@@ -8,11 +8,11 @@ import 'package:chirp_nets/widgets/conversations/add_conversation_widget.dart';
 import 'package:chirp_nets/widgets/conversations/conversations_list_widget.dart';
 import 'package:chirp_nets/widgets/users/add_first_user_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:chirp_nets/models/conversation.dart';
 import 'package:chirp_nets/models/user.dart';
 import 'package:chirp_nets/providers/conversations.dart';
-
 
 class ConversationsScreen extends StatefulWidget {
   ConversationsScreen();
@@ -77,7 +77,10 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
         backgroundColor: Colors.transparent,
         actions: [
           FlatButton(
-            onPressed: () => bluetooth.findDevices(),
+            onPressed: () {
+              Fluttertoast.showToast(msg: deviceConnectingMessage);
+              bluetooth.findDevices();
+            },
             child: Icon(
               bluetooth.device != null
                   ? Icons.bluetooth_connected

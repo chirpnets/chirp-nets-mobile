@@ -43,8 +43,10 @@ String getTimeSinceMessage(DateTime time) {
 }
 
 String parseMessage(List<int> message) {
+  print(message);
   int index = message.indexOf(0);
-  List<int> recievedMessage = message.sublist(0, index - 1);
+  List<int> recievedMessage = message.sublist(0, index);
+  print(recievedMessage);
   return AsciiDecoder().convert(recievedMessage);
 }
 

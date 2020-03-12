@@ -1,5 +1,6 @@
 import 'package:chirp_nets/models/message.dart';
 import 'package:chirp_nets/providers/messages.dart';
+import 'package:chirp_nets/utils/notifications.dart';
 import 'package:chirp_nets/utils/text.dart';
 import 'package:chirp_nets/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +41,13 @@ class Bluetooth with ChangeNotifier {
           print('Device found');
           _device = device.device;
           _device.connect(autoConnect: true).then((_) {
+            _device.state.listen((state) {
+              if (state == BluetoothDeviceState.disconnected) {
+                _device = null;
+                showNotification(3, deviceDisconnectedMessage, deviceDisconnectedNotification, deviceDisconnectedNotification);
+                notifyListeners();
+              }
+            });
             Fluttertoast.showToast(msg: deviceConnectedMessage);
             discoverServices();
           });
