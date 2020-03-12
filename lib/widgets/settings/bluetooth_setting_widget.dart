@@ -18,7 +18,7 @@ class BluetoothSettingWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Container(
-          width: MediaQuery.of(context).size.width * 0.2,
+          width: MediaQuery.of(context).size.width * 0.3,
           child: Text(
             bluetoothSettingsTitle,
             style: Theme.of(context).textTheme.subtitle,
@@ -32,7 +32,7 @@ class BluetoothSettingWidget extends StatelessWidget {
           color: Theme.of(context).buttonColor,
           child: Icon(
             Icons.bluetooth,
-            color: Theme.of(context).iconTheme.color,
+            color: Theme.of(context).highlightColor,
           ),
           onPressed: () => redirectToBluetoothScreen(context),
         ),

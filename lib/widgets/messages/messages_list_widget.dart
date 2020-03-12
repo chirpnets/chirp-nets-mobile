@@ -23,7 +23,7 @@ class MessagesListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Message> messages = messageData.getList();
+    List<Message> messages = messageData.getList(conversation.id);
     return Expanded(
       child: LayoutBuilder(
         builder: (BuildContext ctx, constraints) {
@@ -35,6 +35,11 @@ class MessagesListWidget extends StatelessWidget {
               children: [
                 ...messages.map(
                   (message) {
+                    int index = messages.indexOf(message);
+                    bool sameMessageGroup = false;
+                    if (index == messages.length - 1 || (index < messages.length - 1 && (message.sentBy != messages[index+1].sentBy || message.createdAt.difference(messages[index+1].createdAt).inMinutes >= 20))) {
+                      sameMessageGroup = true;
+                    }
                     if (message.sentBy == user.id) {
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -42,6 +47,7 @@ class MessagesListWidget extends StatelessWidget {
                           SentMessageWidget(
                             message: message,
                             user: user,
+                            sameMessageGroup: sameMessageGroup,
                           ),
                         ],
                       );
@@ -52,6 +58,7 @@ class MessagesListWidget extends StatelessWidget {
                           ReceivedMessageWidget(
                             message: message,
                             currentUser: user,
+                            sameMessageGroup: sameMessageGroup,
                           ),
                         ],
                       );

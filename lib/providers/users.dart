@@ -98,7 +98,7 @@ class Users with ChangeNotifier {
     notifyListeners();
   }
 
-  static List<Map<String, dynamic>> getUsersLocations({Map<int,User> users}) {
+  static List<Map<String, dynamic>> getUsersLocations({Map<int, User> users}) {
     List<Map<String, dynamic>> userLocations = [];
     for (var user in users.values) {
       if (!user.isCurrentUser && user.latitude != null) {
@@ -110,5 +110,21 @@ class Users with ChangeNotifier {
       }
     }
     return userLocations;
+  }
+
+  User getUser({int id}) {
+    User user = _users.values.toList().firstWhere((user) {
+      return user.id == id;
+    });
+    return user;
+  }
+
+  Future<User> getOrCreate({String name}) async {
+    User user = _users.values.firstWhere((user) => user.name == name, orElse: () => User(name: name));
+    if (user.id == null) {
+      int id = await addUser(name);
+      return getUser(id: id);
+    }
+    return user;
   }
 }

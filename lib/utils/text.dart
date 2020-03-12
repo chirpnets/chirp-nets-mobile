@@ -20,10 +20,20 @@ const String displayNamePrompt = 'Display Name';
 
 const String deviceTitle = 'Device';
 
-const String deviceName = '';
+const String deviceName = 'Bluefruit52';
 
-const String deviceConnectingMessage = 'Connecting to device. This may take a minute.';
+const String deviceConnectingMessage = 'Connecting to device.';
+
+const String deviceDisconnectedMessage = 'Device disconnected';
+
+const String deviceDisconnectedNotification = 'You will not receive messages unless connected to the Chirp Nets device.';
+
+const String deviceConnectedMessage = 'Device connected';
 
 const String locationPermissionDeniedMessage = 'User denied location permissions';
 
 const String bluetoothTitle = 'Bluetooth Devices';
+
+const String messageSentBy = 'You';
+
+const String errorSendingMessageText = 'Bluetooth device not connected. Please connect device and try again.';
