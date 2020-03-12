@@ -104,13 +104,13 @@ class Messages with ChangeNotifier {
     notifyListeners();
   }
 
-  void recieveMessage(List<int> listMessage) {
+  void recieveMessage(List<int> listMessage) async {
     List<int> recievedMessage = listMessage.sublist(0, listMessage.length - 1);
     // int checksum = listMessage.last;
     // if (!validateChecksum(checksum, recievedMessage)) {
     //   debugPrint('Checksum incorrect');
     // }
-    User user = users.getOrCreate(name: 'Becky');
+    User user = await users.getOrCreate(name: 'Becky');
     String parsedMessage = parseMessage(recievedMessage);
     print(parsedMessage);
     if (parsedMessage != '') {

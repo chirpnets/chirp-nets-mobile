@@ -119,16 +119,12 @@ class Users with ChangeNotifier {
     return user;
   }
 
-  User getOrCreate({String name}) {
-    User user = _users.values.toList().firstWhere((user) {
-      return user.name == name;
-    }, orElse: () {
-      User tempUser;
-      addUser(name).then((id) {
-        tempUser = getUser(id: id);
-      });
-      return tempUser;
-    });
+  Future<User> getOrCreate({String name}) async {
+    User user = _users.values.firstWhere((user) => user.name == name, orElse: () => User(name: name));
+    if (user.id == null) {
+      int id = await addUser(name);
+      return getUser(id: id);
+    }
     return user;
   }
 }
