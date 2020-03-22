@@ -35,21 +35,22 @@ class Conversations with ChangeNotifier {
     notifyListeners();
   }
 
-  void updateConversation(int id, String name) {
+  void updateConversation(int id, String name, int networkId) {
     _conversations.update(
       id,
       (conversation) => Conversation(
         id: conversation.id,
         name: name,
         userId: conversation.userId,
+        networkId: networkId
       ),
     );
     update(table: 'conversations', object: _conversations[id]);
     notifyListeners();
   }
 
-  Future<int> addConversation(int userId, String name) async {
-    Conversation conversation = Conversation(userId: userId, name: name);
+  Future<int> addConversation(int userId, String name, int networkId) async {
+    Conversation conversation = Conversation(userId: userId, name: name, networkId: networkId);
     int id = await create(table: 'conversations', object: conversation);
     _conversations.putIfAbsent(
       id,
@@ -57,6 +58,7 @@ class Conversations with ChangeNotifier {
         id: id,
         userId: userId,
         name: name,
+        networkId: networkId,
       ),
     );
     notifyListeners();

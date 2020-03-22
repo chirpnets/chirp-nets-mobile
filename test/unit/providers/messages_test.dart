@@ -12,7 +12,7 @@ void messagesTest() {
 
   setUp(() async {
     userId = await userProvider.addUser('Tim');
-    convId = await conversationProvider.addConversation(userId, 'Name');
+    convId = await conversationProvider.addConversation(userId, 'Name', 1);
   });
 
   tearDown(() {

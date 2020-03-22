@@ -14,7 +14,7 @@ class AddFirstUserWidget extends StatelessWidget {
     if (name.isNotEmpty && conversationName.isNotEmpty) {
       int id = users.currentUser.id;
       users.updateUser(id, name);
-      conversations.addConversation(id, conversationName);
+      conversations.addConversation(id, conversationName, 1);
       Navigator.of(ctx).pop();
     }
   }

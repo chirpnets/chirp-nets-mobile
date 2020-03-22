@@ -2,6 +2,8 @@ const String messagePrompt = 'Say something nice...';
 
 const String groupPrompt = 'Enter group name...';
 
+const String networkPrompt = 'Enter Network ID...';
+
 const String namePrompt = 'Enter your name...';
 
 const String addUserPrompt = 'Enter your name, this will be displayed by your messages.';
