@@ -1,7 +1,10 @@
 import 'package:chirp_nets/models/conversation.dart';
 import 'package:chirp_nets/models/message.dart';
+import 'package:chirp_nets/providers/users.dart';
+import 'package:chirp_nets/utils/utils.dart';
+import 'package:chirp_nets/widgets/users/bubble_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class ConversationDetailsWidget extends StatelessWidget {
   const ConversationDetailsWidget({
@@ -15,71 +18,79 @@ class ConversationDetailsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DateFormat formatter = DateFormat('MMM d H:mm');
     String displayMessage = '';
     String dateText = '';
+    String displayName = '';
+    Users userProvider = Provider.of<Users>(context);
+    String bubbleChars = '';
     if (message != null && message.message != null) {
-      displayMessage = message.message.length < 30
+      displayMessage = message.message.length < 40
           ? message.message
-          : '${message.message.substring(0, 30)}...';
-       dateText = formatter.format(message.createdAt);
+          : '${message.message.substring(0, 40)}...';
+      dateText = getTimeSinceMessage(message.createdAt);
+      displayName = userProvider.getUser(id: message.sentBy).name + ':';
+      bubbleChars = displayName[0];
     }
 
     return Container(
       alignment: Alignment.center,
-      color: Theme.of(context).accentColor,
       padding: EdgeInsets.symmetric(horizontal: 5, vertical: 15),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
-            child: Container(
-              padding: EdgeInsets.only(left: 10),
-              alignment: Alignment.bottomLeft,
-              child: CircleAvatar(
-                backgroundColor: Theme.of(context).accentColor,
-                child: Icon(
-                  Icons.person,
-                  color: Theme.of(context).iconTheme.color,
-                  size: 40,
-                ),
-              ),
-            ),
-          ),
-          Expanded(
             flex: 4,
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 10),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    padding: EdgeInsets.only(top: 5),
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      conversation.name,
-                      style: Theme.of(context).textTheme.subtitle,
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          constraints: BoxConstraints(
+                            maxWidth: MediaQuery.of(context).size.width * 0.40,
+                          ),
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            conversation.name,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.subtitle,
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(right: 5),
+                          child: Text(
+                            '$dateText',
+                            style: Theme.of(context).textTheme.caption,
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment.bottomRight,
+                          child: BubbleWidget(
+                            colourIndex: message != null && message.sentBy != null ? message.sentBy % 6 : null,
+                            hint: bubbleChars,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  Container(
-                    padding: EdgeInsets.only(top: 5),
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      '$displayMessage',
-                      style: Theme.of(context).textTheme.caption,
-                    ),
+                  Row(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.only(top: 5),
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          '$displayName $displayMessage',
+                          style: Theme.of(context).textTheme.caption,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 2,
-            child: Container(
-              margin: EdgeInsets.only(top: 25, right: 10),
-              alignment: Alignment.bottomRight,
-              child: Text(
-                '$dateText',
-                style: Theme.of(context).textTheme.caption,
               ),
             ),
           ),

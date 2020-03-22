@@ -1,6 +1,7 @@
 import 'package:chirp_nets/models/conversation.dart';
 import 'package:chirp_nets/models/message.dart';
 import 'package:chirp_nets/models/user.dart';
+import 'package:chirp_nets/providers/bluetooth.dart';
 import 'package:chirp_nets/providers/messages.dart';
 import 'package:chirp_nets/providers/users.dart';
 import 'package:chirp_nets/utils/text.dart';
@@ -24,7 +25,8 @@ class MessageInputWidget extends StatelessWidget {
     String message,
     int conversationId,
     User user,
-    Messages provider,
+    Messages messageProvider,
+    Bluetooth bluetooth,
   ) async {
     if (message.isEmpty) {
       return;
@@ -36,13 +38,15 @@ class MessageInputWidget extends StatelessWidget {
       conversationId: conversationId,
       sentBy: user.id,
     );
-    provider.addMessage(
-      messageObject.sentBy,
-      messageObject.conversationId,
-      messageObject.message,
-      messageObject.createdAt,
-    );
-
+    bool success = bluetooth.sendMessage(messageObject);
+    if (success) {
+      messageProvider.addMessage(
+        messageObject.sentBy,
+        messageObject.conversationId,
+        messageObject.message,
+        messageObject.createdAt,
+      );
+    }
     textController.clear();
   }
 
@@ -50,13 +54,14 @@ class MessageInputWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final Messages messageData = Provider.of<Messages>(context);
     final User user = Provider.of<Users>(context).currentUser;
+    final Bluetooth bluetooth = Provider.of<Bluetooth>(context);
     return Container(
       height: 60,
       margin: EdgeInsets.all(10),
-      padding: EdgeInsets.only(left: 10),
+      padding: EdgeInsets.only(left: 15),
       decoration: BoxDecoration(
-          color: Theme.of(context).primaryColor,
-          borderRadius: BorderRadius.circular(10),
+          color: Theme.of(context).accentColor,
+          borderRadius: BorderRadius.circular(30),
           boxShadow: [
             BoxShadow(
               color: Colors.black,
@@ -71,11 +76,14 @@ class MessageInputWidget extends StatelessWidget {
           Expanded(
             flex: 3,
             child: Container(
-              padding: EdgeInsets.all(5),
+              padding: EdgeInsets.only(bottom: 3, top: 5),
               child: TextField(
+                maxLengthEnforced: true,
+                maxLength: 120,
+                maxLines: null,
                 style: Theme.of(context).textTheme.body1,
                 textCapitalization: TextCapitalization.sentences,
-                decoration: InputDecoration(
+                decoration: InputDecoration.collapsed(
                   hintStyle: Theme.of(context).textTheme.body1,
                   hasFloatingPlaceholder: true,
                   hintText: messagePrompt,
@@ -85,6 +93,7 @@ class MessageInputWidget extends StatelessWidget {
                   conversation.id,
                   user,
                   messageData,
+                  bluetooth,
                 ),
                 controller: textController,
               ),
@@ -92,17 +101,17 @@ class MessageInputWidget extends StatelessWidget {
           ),
           Expanded(
             child: Container(
-              padding: EdgeInsets.only(right: 5),
-              child: FlatButton(
-                child: Icon(
+              child: IconButton(
+                icon: Icon(
                   Icons.send,
                 ),
-                color: Theme.of(context).primaryColor,
+                color: Colors.grey,
                 onPressed: () => sendMessage(
                   textController.text,
                   conversation.id,
                   user,
                   messageData,
+                  bluetooth,
                 ),
               ),
             ),

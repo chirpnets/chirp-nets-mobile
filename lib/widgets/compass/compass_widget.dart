@@ -66,19 +66,14 @@ class _CompassWidgetState extends State<CompassWidget> {
               width: radius,
               height: radius,
               decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.black,
-                  width: 1,
-                  style: BorderStyle.solid,
-                ),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black,
-                    offset: Offset(0.0, 5.0),
-                    blurRadius: 5.0,
+                    offset: Offset(0.0, 2.0),
+                    blurRadius: 2.0,
                   ),
                 ],
-                color: Theme.of(context).primaryColor,
+                color: Theme.of(context).accentColor,
                 shape: BoxShape.circle,
               ),
             ),

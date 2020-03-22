@@ -20,11 +20,13 @@ class CompassScreen extends StatelessWidget {
         Users.getUsersLocations(users: users);
     return Scaffold(
       appBar: AppBar(
+        elevation: 0.0,
         iconTheme: Theme.of(context).iconTheme,
         title: Text(
           compassTitle,
           style: Theme.of(context).textTheme.title,
         ),
+        backgroundColor: Colors.transparent,
       ),
       body: Container(
         height: MediaQuery.of(context).size.height,

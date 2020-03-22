@@ -13,3 +13,10 @@ flutter pub get
 ## Run application when appropreate device is connected
 
 flutter run
+
+
+## Application design 
+
+https://github.com/MRoym/chat-app-design
+Design by Michael Mather.
+https://github.com/MRoym

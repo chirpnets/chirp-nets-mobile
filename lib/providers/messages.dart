@@ -1,36 +1,54 @@
 import 'package:chirp_nets/models/message.dart';
+import 'package:chirp_nets/models/user.dart';
+import 'package:chirp_nets/utils/notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:chirp_nets/utils/database.dart';
+import 'package:chirp_nets/utils/utils.dart';
+import 'users.dart';
 
 class Messages with ChangeNotifier {
-  Map<int, Message> _messages = {};
-  int _conversationId;
-  Map<int, Message> _lastMessages = {};
-
-  Map<int, Message> get messages {
-    return {..._messages};
+  Messages() {
+    retrieveMessagesFromAllConversations();
   }
 
-  int get conversationId {
-    return _conversationId;
+  Map<int, List<Message>> _messages = {};
+  Users users;
+  Map<int, Message> _lastMessages = {};
+
+  Map<int, List<Message>> get messages {
+    return {..._messages};
   }
 
   Map<int, Message> get lastMessages {
     return _lastMessages;
   }
 
-  void getMessagesFromConversation({int conversationId}) async {
+  List<Message> getMessagesFromConversation(int convId) {
+    if (_messages[convId] != null) {
+      return _messages[convId];
+    }
+    return [];
+  }
+
+  void retrieveMessagesFromAllConversations() async {
     List<Message> messages;
-    messages = await getMessages(
-        where: 'conversationId = ?', whereArgs: [conversationId]);
-    _conversationId = conversationId;
-    _messages = {for (var message in messages) message.id: message};
+    messages = await getMessages();
+    for (Message message in messages) {
+      if (_messages[message.conversationId] == null) {
+        _messages[message.conversationId] = [message];
+      } else {
+        if (!_messages[message.conversationId].contains(message)) {
+          _messages[message.conversationId].add(message);
+        }
+      }
+    }
     notifyListeners();
   }
 
-  List<int> getUserIds() {
+  List<int> getUserIds(int conversationId) {
     List<int> ids = [];
-    _messages.forEach((id, message) {
+    List<Message> messages = getMessagesFromConversation(conversationId);
+    messages.forEach((message) {
       if (!ids.contains(message.sentBy)) {
         ids.add(message.sentBy);
       }
@@ -48,9 +66,11 @@ class Messages with ChangeNotifier {
     );
     int id = await create(table: 'messages', object: newMessage);
     _lastMessages[conversationId] = newMessage;
-    _messages.putIfAbsent(
-      id,
-      () => Message(
+    if (_messages[conversationId] == null) {
+      _messages[conversationId] = [];
+    }
+    _messages[conversationId].add(
+      Message(
         id: id,
         sentBy: sentBy,
         conversationId: conversationId,
@@ -62,9 +82,9 @@ class Messages with ChangeNotifier {
     return id;
   }
 
-  List<Message> getList() {
+  List<Message> getList(int conversationId) {
     List<Message> messages = [];
-    messages = {for (var id in _messages.keys) _messages[id]}.toList();
+    messages = getMessagesFromConversation(conversationId);
     messages.sort((a, b) => -a.createdAt.compareTo(b.createdAt));
     return messages;
   }
@@ -82,5 +102,20 @@ class Messages with ChangeNotifier {
     var lastMessage = message.isEmpty ? Message() : message[0];
     _lastMessages.putIfAbsent(conversationId, () => lastMessage);
     notifyListeners();
+  }
+
+  void recieveMessage(List<int> listMessage) async {
+    List<int> recievedMessage = listMessage.sublist(0, listMessage.length - 1);
+    // int checksum = listMessage.last;
+    // if (!validateChecksum(checksum, recievedMessage)) {
+    //   debugPrint('Checksum incorrect');
+    // }
+    User user = await users.getOrCreate(name: 'Becky');
+    String parsedMessage = parseMessage(recievedMessage);
+    print(parsedMessage);
+    if (parsedMessage != '') {
+      addMessage(user.id, 1, parsedMessage, DateTime.now());
+      showNotification(0, '${user.name}', '$parsedMessage', '$parsedMessage');
+    }
   }
 }

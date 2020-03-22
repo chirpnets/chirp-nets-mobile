@@ -1,4 +1,5 @@
 import 'package:chirp_nets/utils/text.dart';
+import 'package:chirp_nets/widgets/common/delete_alert_dialog.dart';
 import 'package:flutter/material.dart';
 
 import 'package:chirp_nets/models/conversation.dart';
@@ -37,6 +38,20 @@ class AddConversationWidget extends StatelessWidget {
     Navigator.pop(ctx);
   }
 
+  void deleteConversation(conversation, provider, ctx) {
+    showDialog(
+      context: ctx,
+      child: DeleteAlertDialog(
+        title:
+            'Are you sure?\nThis will delete all messages associated with this conversation',
+        id: conversation.id,
+        onDelete: conversationData.deleteConversation,
+      ),
+    ).then((_) {
+      Navigator.of(ctx).pop();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     if (conversation != null) {
@@ -47,8 +62,9 @@ class AddConversationWidget extends StatelessWidget {
       );
     }
     return Container(
+      height: MediaQuery.of(context).size.height/3.5,
       child: Card(
-        color: Theme.of(context).primaryColor,
+        color: Theme.of(context).accentColor,
         child: Container(
           padding: EdgeInsets.all(10),
           child: Column(
@@ -79,13 +95,24 @@ class AddConversationWidget extends StatelessWidget {
                     textController.text,
                     context,
                   ),
-                  color: Theme.of(context).buttonColor,
+                  color: Theme.of(context).accentColor,
                   child: Icon(
                     Icons.add_comment,
-                    color: Theme.of(context).iconTheme.color,
+                    color: Theme.of(context).highlightColor,
                   ),
                 ),
-              )
+              ),
+              if (conversation != null)
+                Container(
+                  child: RaisedButton(
+                    child: Icon(
+                      Icons.delete_forever,
+                      color: Theme.of(context).errorColor,
+                    ),
+                    onPressed: () => this.deleteConversation(
+                        conversation, conversationData, context),
+                  ),
+                )
             ],
           ),
         ),
