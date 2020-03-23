@@ -66,7 +66,6 @@ class AddConversationWidgetState extends State<AddConversationWidget> {
   void submitForm(context) {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      print(formData);
       addConversation(
         widget.conversationData,
         widget.user,
@@ -79,15 +78,6 @@ class AddConversationWidgetState extends State<AddConversationWidget> {
 
   @override
   Widget build(BuildContext context) {
-    /* What does this do? */
-    // if (conversation != null) {
-    //   textController.text = conversation.name;
-    //   textController.selection = TextSelection(
-    //     baseOffset: 0,
-    //     extentOffset: conversation.name.length,
-    //   );
-    //   networkIdController.text = conversation.networkId.toString();
-    // }
     return Form(
       key:_formKey,
       child:Container(

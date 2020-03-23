@@ -59,10 +59,6 @@ class Users with ChangeNotifier {
   }
 
   void updateUser(int id, {String name, int nodeId}) {
-    print("in updateUser, NAME:");
-    print(name);
-    print("in updateUser, nodeId:");
-    print(nodeId);
     _users.update(
       id,
       (oldUser) => User(
