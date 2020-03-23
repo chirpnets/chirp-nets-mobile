@@ -4,6 +4,8 @@ const String groupPrompt = 'Enter group name...';
 
 const String networkPrompt = 'Enter Network ID...';
 
+const String nodePrompt = 'Enter Node ID...';
+
 const String namePrompt = 'Enter your name...';
 
 const String addUserPrompt = 'Enter your name, this will be displayed by your messages.';
@@ -19,6 +21,8 @@ const String compassTitle = 'Relative Locations';
 const String yourLocationText = 'Your Location';
 
 const String displayNamePrompt = 'Display Name';
+
+const String nodeIdNamePrompt = "Node ID";
 
 const String deviceTitle = 'Device';
 

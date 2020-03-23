@@ -14,14 +14,15 @@ class Users with ChangeNotifier {
     return {..._users};
   }
 
-  Future<int> addUser(String name, {bool isCurrentUser = false}) async {
-    User user = User(name: name, isCurrentUser: isCurrentUser);
+  Future<int> addUser({String name, int nodeId, bool isCurrentUser = false}) async {
+    User user = User(name: name, nodeId: nodeId != null ? nodeId : 0, isCurrentUser: isCurrentUser);
     int id = await create(table: 'users', object: user);
     _users.putIfAbsent(
       id,
       () => User(
         id: id,
         name: name,
+        nodeId: nodeId,
         isCurrentUser: isCurrentUser,
       ),
     );
@@ -44,7 +45,7 @@ class Users with ChangeNotifier {
       );
     }
     if (_currentUser == null) {
-      addUser('', isCurrentUser: true).then((id) {
+      addUser(name: '', nodeId: 0, isCurrentUser: true).then((id) {
         _users.putIfAbsent(
           id,
           () => User(
@@ -57,12 +58,17 @@ class Users with ChangeNotifier {
     notifyListeners();
   }
 
-  void updateUser(int id, String name) {
+  void updateUser(int id, {String name, int nodeId}) {
+    print("in updateUser, NAME:");
+    print(name);
+    print("in updateUser, nodeId:");
+    print(nodeId);
     _users.update(
       id,
       (oldUser) => User(
         id: oldUser.id,
-        name: name,
+        name: name != null ? name : oldUser.name,
+        nodeId: nodeId != null ? nodeId : oldUser.nodeId,
         isCurrentUser: oldUser.isCurrentUser,
       ),
     );
@@ -89,6 +95,7 @@ class Users with ChangeNotifier {
       (oldUser) => User(
         id: oldUser.id,
         name: oldUser.name,
+        nodeId: oldUser.nodeId,
         isCurrentUser: oldUser.isCurrentUser,
         latitude: latitude.toString(),
         longitude: longitude.toString(),
@@ -119,10 +126,10 @@ class Users with ChangeNotifier {
     return user;
   }
 
-  Future<User> getOrCreate({String name}) async {
+  Future<User> getOrCreate({String name, int nodeId}) async {
     User user = _users.values.firstWhere((user) => user.name == name, orElse: () => User(name: name));
     if (user.id == null) {
-      int id = await addUser(name);
+      int id = await addUser(name:name, nodeId:nodeId);
       return getUser(id: id);
     }
     return user;

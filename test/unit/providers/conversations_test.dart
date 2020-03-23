@@ -8,7 +8,7 @@ void conversationsTest() {
   var userProvider = Users();
 
   setUp(() async {
-    userId = await userProvider.addUser('Tim');
+    userId = await userProvider.addUser(name:'Tim', nodeId: 0);
   });
 
   tearDown(() {

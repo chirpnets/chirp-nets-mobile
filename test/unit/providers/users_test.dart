@@ -24,7 +24,7 @@ void usersTest() {
     });
 
     test('Can get current user', () async {
-      var id = await userData.addUser('test_user', isCurrentUser: true);
+      var id = await userData.addUser(name:'test_user', nodeId: 0, isCurrentUser: true);
       expect(userData.currentUser, isInstanceOf<User>());
       expect(userData.currentUser.id, equals(id));
       expect(userData.currentUser.name, equals('test_user'));
@@ -33,8 +33,8 @@ void usersTest() {
     test(
       'Can update user',
       () async {
-        var id = await userData.addUser('test_user');
-        userData.updateUser(id, 'updated_user');
+        var id = await userData.addUser(name: 'test_user', nodeId: 0);
+        userData.updateUser(id, name:'updated_user');
         expect(userData.users[id].name, equals('updated_user'));
       },
     );
@@ -43,7 +43,7 @@ void usersTest() {
       'Can add user to provider',
       () async {
         User user = new User(name: 'test_user');
-        var id = await userData.addUser(user.name);
+        var id = await userData.addUser(name:user.name, nodeId: 0);
         expect(userData.users[id].name, equals(user.name));
       },
     );

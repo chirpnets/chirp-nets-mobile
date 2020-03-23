@@ -11,7 +11,7 @@ void messagesTest() {
   var messageProvider = Messages();
 
   setUp(() async {
-    userId = await userProvider.addUser('Tim');
+    userId = await userProvider.addUser(name:'Tim', nodeId: 0);
     convId = await conversationProvider.addConversation(userId, 'Name', 1);
   });
 

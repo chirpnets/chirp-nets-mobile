@@ -7,13 +7,14 @@ import 'package:chirp_nets/providers/users.dart';
 class AddFirstUserWidget extends StatelessWidget {
   void createUserAndConversation(
       String name,
+      int nodeId,
       Users users,
       String conversationName,
       Conversations conversations,
       BuildContext ctx) async {
-    if (name.isNotEmpty && conversationName.isNotEmpty) {
+    if (name.isNotEmpty && conversationName.isNotEmpty && nodeId != null) {
       int id = users.currentUser.id;
-      users.updateUser(id, name);
+      users.updateUser(id, name:name, nodeId:nodeId);
       conversations.addConversation(id, conversationName, 1);
       Navigator.of(ctx).pop();
     }
@@ -23,6 +24,7 @@ class AddFirstUserWidget extends StatelessWidget {
   final Conversations conversationData;
   final Users userData;
   final TextEditingController userTextController = TextEditingController();
+  final TextEditingController nodeTextController = TextEditingController();
   final TextEditingController conversationTextController =
       TextEditingController();
 
@@ -69,8 +71,31 @@ class AddFirstUserWidget extends StatelessWidget {
                     Container(
                       width: MediaQuery.of(context).size.width * 0.6,
                       child: TextField(
+                        autofocus: true,
                         style: Theme.of(context).textTheme.body1,
                         textCapitalization: TextCapitalization.words,
+                        decoration: InputDecoration(
+                          hintStyle: Theme.of(context).textTheme.body1,
+                          hasFloatingPlaceholder: true,
+                          hintText: nodePrompt,
+                        ),
+                        controller: nodeTextController,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.6,
+                      child: TextField(
+                        style: Theme.of(context).textTheme.body1,
+                        textCapitalization: TextCapitalization.words,
+                        keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           hintStyle: Theme.of(context).textTheme.body1,
                           hasFloatingPlaceholder: true,
@@ -79,6 +104,7 @@ class AddFirstUserWidget extends StatelessWidget {
                         onSubmitted: (String message) =>
                             createUserAndConversation(
                           userTextController.text,
+                          int.parse(nodeTextController.text),
                           userData,
                           message,
                           conversationData,
@@ -93,6 +119,7 @@ class AddFirstUserWidget extends StatelessWidget {
                       child: RaisedButton(
                         onPressed: () => createUserAndConversation(
                           userTextController.text,
+                          int.parse(nodeTextController.text),
                           userData,
                           conversationTextController.text,
                           conversationData,

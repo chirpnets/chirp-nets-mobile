@@ -17,6 +17,9 @@ final Map<int, List<String>> migrations = {
   ],
   2: [
     "ALTER TABLE conversations ADD COLUMN networkId INTEGER;",
+  ],
+  3: [
+    "ALTER TABLE users ADD COLUMN nodeId INTEGER;",
   ]
 };
 
@@ -37,7 +40,7 @@ Future<Database> getDatabase() async {
       }
       await batch.commit();
     },
-    version: 2,
+    version: 3,
   );
   return database;
 }
@@ -92,6 +95,7 @@ Future<List<User>> getUsers({where, whereArgs}) async {
     return User(
       id: maps[i]['id'],
       name: maps[i]['name'],
+      nodeId: maps[i]['nodeId'],
       isCurrentUser: maps[i]['isCurrentUser'] > 0 ? true : false,
       latitude: maps[i]['latitude'],
       longitude: maps[i]['longitude'],
