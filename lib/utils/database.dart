@@ -14,6 +14,12 @@ final Map<int, List<String>> migrations = {
     "ALTER TABLE devices ADD COLUMN name;",
     "ALTER TABLE messages ADD COLUMN sentBy INTEGER; ALTER TABLE messages add FOREIGN KEY(sentBy) REFERENCES users(id)",
     "ALTER TABLE messages ADD COLUMN isRead INTEGER;",
+  ],
+  2: [
+    "ALTER TABLE conversations ADD COLUMN networkId INTEGER;",
+  ],
+  3: [
+    "ALTER TABLE users ADD COLUMN nodeId INTEGER;",
   ]
 };
 
@@ -34,7 +40,7 @@ Future<Database> getDatabase() async {
       }
       await batch.commit();
     },
-    version: 1,
+    version: 3,
   );
   return database;
 }
@@ -89,6 +95,7 @@ Future<List<User>> getUsers({where, whereArgs}) async {
     return User(
       id: maps[i]['id'],
       name: maps[i]['name'],
+      nodeId: maps[i]['nodeId'],
       isCurrentUser: maps[i]['isCurrentUser'] > 0 ? true : false,
       latitude: maps[i]['latitude'],
       longitude: maps[i]['longitude'],
@@ -111,6 +118,7 @@ Future<List<Conversation>> getConversations({where, whereArgs}) async {
       id: maps[i]['id'],
       name: maps[i]['name'],
       userId: maps[i]['userId'],
+      networkId: maps[i]['networkId']
     );
   });
 }

@@ -110,7 +110,8 @@ class Messages with ChangeNotifier {
     // if (!validateChecksum(checksum, recievedMessage)) {
     //   debugPrint('Checksum incorrect');
     // }
-    User user = await users.getOrCreate(name: 'Becky');
+    // Here we should check the nodeId in the packet and set accordingly
+    User user = await users.getOrCreate(name: 'Becky', nodeId: 1);
     String parsedMessage = parseMessage(recievedMessage);
     print(parsedMessage);
     if (parsedMessage != '') {

@@ -8,7 +8,7 @@ void conversationsTest() {
   var userProvider = Users();
 
   setUp(() async {
-    userId = await userProvider.addUser('Tim');
+    userId = await userProvider.addUser(name:'Tim', nodeId: 0);
   });
 
   tearDown(() {
@@ -26,7 +26,7 @@ void conversationsTest() {
     });
 
     test('Can add conversation to provider', () async {
-      int convId = await conversationProvider.addConversation(userId, 'Name');
+      int convId = await conversationProvider.addConversation(userId, 'Name', 1);
       var conversations = conversationProvider.conversations;
       expect(conversations[convId].name, equals('Name'));
     });
@@ -34,8 +34,8 @@ void conversationsTest() {
     test(
       'Can update conversation',
       () async {
-        int id = await conversationProvider.addConversation(userId, 'Conve');
-        conversationProvider.updateConversation(id, 'conversation');
+        int id = await conversationProvider.addConversation(userId, 'Conve', 2);
+        conversationProvider.updateConversation(id, 'conversation', 3);
         var conversations = conversationProvider.conversations;
         expect(conversations[id].name, equals('conversation'));
       },
@@ -44,7 +44,7 @@ void conversationsTest() {
     test(
       'Can delete conversation',
       () async {
-        int id = await conversationProvider.addConversation(userId, 'Conve');
+        int id = await conversationProvider.addConversation(userId, 'Conve', 4);
         var originialConversations = conversationProvider.conversations;
         conversationProvider.deleteConversation(id);
         var conversations = conversationProvider.conversations;

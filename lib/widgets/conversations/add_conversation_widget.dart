@@ -6,35 +6,46 @@ import 'package:chirp_nets/models/conversation.dart';
 import 'package:chirp_nets/models/user.dart';
 import 'package:chirp_nets/providers/conversations.dart';
 
-class AddConversationWidget extends StatelessWidget {
+class AddConversationWidget extends StatefulWidget {
   final Conversations conversationData;
   final User user;
-  final textController = TextEditingController();
   final Conversation conversation;
 
   AddConversationWidget({this.conversationData, this.user, this.conversation});
 
+  @override
+  AddConversationWidgetState createState() {
+    return AddConversationWidgetState();
+  }
+}
+
+class AddConversationWidgetState extends State<AddConversationWidget> {
+  final _formKey = GlobalKey<FormState>();
+  final Map<String, dynamic> formData = {'name': null, 'networkId': null};
+
   void addConversation(
-      Conversations conversationData, User user, String name, ctx) {
-    if (name.isEmpty) {
+      Conversations conversationData, User user, String name, int networkId, ctx) {
+    if (name.isEmpty || networkId == null) {
       return;
     }
-    if (conversation != null) {
+    if (widget.conversation != null) {
       conversationData.updateConversation(
-        conversation.id,
+        widget.conversation.id,
         name,
+        networkId,
       );
     } else {
       Conversation conv = Conversation(
         userId: user.id,
         name: name,
+        networkId: networkId,
       );
       conversationData.addConversation(
         conv.userId,
         conv.name,
+        conv.networkId,
       );
     }
-    textController.clear();
     Navigator.pop(ctx);
   }
 
@@ -45,23 +56,31 @@ class AddConversationWidget extends StatelessWidget {
         title:
             'Are you sure?\nThis will delete all messages associated with this conversation',
         id: conversation.id,
-        onDelete: conversationData.deleteConversation,
+        onDelete: widget.conversationData.deleteConversation,
       ),
     ).then((_) {
       Navigator.of(ctx).pop();
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    if (conversation != null) {
-      textController.text = conversation.name;
-      textController.selection = TextSelection(
-        baseOffset: 0,
-        extentOffset: conversation.name.length,
+  void submitForm(context) {
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+      addConversation(
+        widget.conversationData,
+        widget.user,
+        formData['name'],
+        int.parse(formData['networkId']),
+        context,
       );
     }
-    return Container(
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key:_formKey,
+      child:Container(
       height: MediaQuery.of(context).size.height/3.5,
       child: Card(
         color: Theme.of(context).accentColor,
@@ -69,7 +88,7 @@ class AddConversationWidget extends StatelessWidget {
           padding: EdgeInsets.all(10),
           child: Column(
             children: [
-              TextField(
+              TextFormField(
                 autofocus: true,
                 style: Theme.of(context).textTheme.body1,
                 textCapitalization: TextCapitalization.words,
@@ -78,23 +97,31 @@ class AddConversationWidget extends StatelessWidget {
                   hasFloatingPlaceholder: true,
                   hintText: groupPrompt,
                 ),
-                onSubmitted: (String message) => addConversation(
-                  conversationData,
-                  user,
-                  message,
-                  context,
+                onSaved: (String value) {
+                  formData['name'] = value;
+                },
+
+              ),
+              TextFormField(
+                autofocus: false,
+                style: Theme.of(context).textTheme.body1,
+                textCapitalization: TextCapitalization.words,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  hintStyle: Theme.of(context).textTheme.body1,
+                  hasFloatingPlaceholder: true,
+                  hintText: networkPrompt,
                 ),
-                controller: textController,
+                onSaved: (String value) {
+                  formData['networkId'] = value;
+                },
               ),
               Container(
                 margin: EdgeInsets.symmetric(vertical: 10),
                 child: RaisedButton(
-                  onPressed: () => addConversation(
-                    conversationData,
-                    user,
-                    textController.text,
-                    context,
-                  ),
+                  onPressed: () => {
+                    submitForm(context)
+                  },
                   color: Theme.of(context).accentColor,
                   child: Icon(
                     Icons.add_comment,
@@ -102,7 +129,7 @@ class AddConversationWidget extends StatelessWidget {
                   ),
                 ),
               ),
-              if (conversation != null)
+              if (widget.conversation != null)
                 Container(
                   child: RaisedButton(
                     child: Icon(
@@ -110,13 +137,14 @@ class AddConversationWidget extends StatelessWidget {
                       color: Theme.of(context).errorColor,
                     ),
                     onPressed: () => this.deleteConversation(
-                        conversation, conversationData, context),
+                       widget. conversation, widget.conversationData, context),
                   ),
                 )
             ],
           ),
         ),
       ),
+    )
     );
   }
 }
