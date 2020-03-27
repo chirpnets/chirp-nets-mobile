@@ -43,15 +43,21 @@ String getTimeSinceMessage(DateTime time) {
 }
 
 String parseMessage(List<int> message) {
-  print(message);
   int index = message.indexOf(0);
   List<int> recievedMessage = message.sublist(0, index);
-  print(recievedMessage);
   return AsciiDecoder().convert(recievedMessage);
 }
 
-List<int> encodeMessage(String message) {
-  return AsciiEncoder().convert(message);
+List<int> buildPacket(int networkId, int nodeId, int type,
+    {String message = ''}) {
+  List<int> encoded;
+  if (message != null) {
+    encoded = new List<int>.from(AsciiEncoder().convert(message));
+  }
+  encoded.insert(0, nodeId);
+  encoded.insert(0, networkId);
+  encoded.insert(0, type);
+  return encoded;
 }
 
 int getChecksum(List<int> message) {

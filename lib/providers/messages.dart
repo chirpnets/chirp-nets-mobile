@@ -105,17 +105,13 @@ class Messages with ChangeNotifier {
   }
 
   void recieveMessage(List<int> listMessage) async {
-    List<int> recievedMessage = listMessage.sublist(0, listMessage.length - 1);
-    // int checksum = listMessage.last;
-    // if (!validateChecksum(checksum, recievedMessage)) {
-    //   debugPrint('Checksum incorrect');
-    // }
-    // Here we should check the nodeId in the packet and set accordingly
-    User user = await users.getOrCreate(name: 'Becky', nodeId: 1);
+    var nodeId = listMessage[2].toString() + listMessage[3].toString();
+    int conversationId = listMessage[1];
+    List<int> recievedMessage = listMessage.sublist(2, listMessage.length);
     String parsedMessage = parseMessage(recievedMessage);
-    print(parsedMessage);
-    if (parsedMessage != '') {
-      addMessage(user.id, 1, parsedMessage, DateTime.now());
+    User user = await users.getOrCreate(name: 'Becky', nodeId: int.parse(nodeId));
+    if (parsedMessage != null) {
+      addMessage(user.id, conversationId, parsedMessage, DateTime.now());
       showNotification(0, '${user.name}', '$parsedMessage', '$parsedMessage');
     }
   }

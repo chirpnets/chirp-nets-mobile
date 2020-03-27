@@ -1,4 +1,6 @@
+import 'package:chirp_nets/models/conversation.dart';
 import 'package:chirp_nets/models/message.dart';
+import 'package:chirp_nets/models/user.dart';
 import 'package:chirp_nets/providers/messages.dart';
 import 'package:chirp_nets/utils/notifications.dart';
 import 'package:chirp_nets/utils/text.dart';
@@ -101,15 +103,15 @@ class Bluetooth with ChangeNotifier {
     notifyListeners();
   }
 
-  bool sendMessage(Message message) {
+  bool sendMessage(Message message, Conversation conversation, User user) {
     if (txCharacteristic == null) {
       Fluttertoast.showToast(
         msg: errorSendingMessageText,
       );
       return false;
     }
-    List<int> encoded = new List<int>.from(encodeMessage(message.message));
-    txCharacteristic.write([...encoded]);
+    List<int> packet = buildPacket(conversation.networkId, user.nodeId, 1, message: message.message);
+    txCharacteristic.write([...packet]);
     return true;
   }
 }
