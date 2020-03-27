@@ -105,6 +105,8 @@ class Messages with ChangeNotifier {
   }
 
   void recieveMessage(List<int> listMessage) async {
+    print("receieved message:");
+    print(listMessage);
     var nodeId = listMessage[2].toString() + listMessage[3].toString();
     int conversationId = listMessage[1];
     List<int> recievedMessage = listMessage.sublist(2, listMessage.length);

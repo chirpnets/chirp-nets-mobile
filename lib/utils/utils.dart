@@ -43,8 +43,12 @@ String getTimeSinceMessage(DateTime time) {
 }
 
 String parseMessage(List<int> message) {
+  print("parse message:");
+  print(message);
   int index = message.indexOf(0);
   List<int> recievedMessage = message.sublist(0, index);
+  print('decoded:');
+  print(AsciiDecoder().convert(recievedMessage));
   return AsciiDecoder().convert(recievedMessage);
 }
 
@@ -54,9 +58,9 @@ List<int> buildPacket(int networkId, int nodeId, int type,
   if (message != null) {
     encoded = new List<int>.from(AsciiEncoder().convert(message));
   }
-  encoded.insert(0, nodeId);
-  encoded.insert(0, networkId);
-  encoded.insert(0, type);
+  // encoded.insert(0, nodeId);
+  // encoded.insert(0, networkId);
+  // encoded.insert(0, type);
   return encoded;
 }
 

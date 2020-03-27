@@ -82,6 +82,7 @@ class Bluetooth with ChangeNotifier {
             txCharacteristic = c;
           }
           if (c.uuid.toString() == rxUUID) {
+            print("receiving");
             rxCharacteristic = c;
             rxCharacteristic.setNotifyValue(true);
             rxCharacteristic.value.listen((value) {
