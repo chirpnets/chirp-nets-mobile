@@ -108,11 +108,11 @@ class Messages with ChangeNotifier {
     if (listMessage.length < 4) {
       return;
     }
-    var nodeId = listMessage[2].toString() + listMessage[3].toString();
+    int nodeId = int.parse(listMessage[2].toString() + listMessage[3].toString());
     int conversationId = listMessage[1];
     List<int> recievedMessage = listMessage.sublist(4, listMessage.length);
     String parsedMessage = parseMessage(recievedMessage);
-    User user = await users.getOrCreate(name: 'Becky', nodeId: int.parse(nodeId));
+    User user = await users.getOrCreate(name: 'Becky', nodeId: nodeId);
     if (parsedMessage != null) {
       addMessage(user.id, conversationId, parsedMessage, DateTime.now());
       showNotification(0, '${user.name}', '$parsedMessage', '$parsedMessage');
