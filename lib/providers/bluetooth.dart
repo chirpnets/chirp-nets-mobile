@@ -111,7 +111,9 @@ class Bluetooth with ChangeNotifier {
       );
       return false;
     }
+    print('SENDING MESSAGE:');
     List<int> packet = buildPacket(conversation.networkId, user.nodeId, 1, message: message.message);
+    print([...packet]);
     txCharacteristic.write([...packet]);
     return true;
   }
