@@ -31,7 +31,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
     setupNotifications();
   }
 
-  void getBottomSheet(context, conversationData) {
+  void getBottomSheet(context, conversationData, bluetooth) {
     User user = userData.currentUser;
     showModalBottomSheet(
       context: context,
@@ -49,6 +49,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
               : AddConversationWidget(
                   conversationData: conversationData,
                   user: user,
+                  bluetooth: bluetooth,
                 ),
         ),
       ),
@@ -112,7 +113,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
           color: Theme.of(context).highlightColor,
         ),
         tooltip: 'Add Conversation',
-        onPressed: () => getBottomSheet(context, conversationData),
+        onPressed: () => getBottomSheet(context, conversationData, bluetooth),
       ),
     );
   }

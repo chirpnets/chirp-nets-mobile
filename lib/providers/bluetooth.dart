@@ -11,6 +11,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 class Bluetooth with ChangeNotifier {
   BluetoothDevice _device;
+  User _currentUser;
+  Conversation _conversation;
   FlutterBlue _flutterBlue = FlutterBlue.instance;
   BluetoothCharacteristic txCharacteristic;
   BluetoothCharacteristic rxCharacteristic;
@@ -24,6 +26,16 @@ class Bluetooth with ChangeNotifier {
 
   BluetoothDevice get device {
     return _device;
+  }
+
+  set conversation(Conversation conv) {
+    _conversation = conv;
+    notifyListeners();
+  }
+
+  set currentUser(User user) {
+    _currentUser = user;
+    notifyListeners();
   }
 
   Future<void> findDevices() async {
@@ -46,7 +58,11 @@ class Bluetooth with ChangeNotifier {
             _device.state.listen((state) {
               if (state == BluetoothDeviceState.disconnected) {
                 _device = null;
-                showNotification(3, deviceDisconnectedMessage, deviceDisconnectedNotification, deviceDisconnectedNotification);
+                showNotification(
+                    3,
+                    deviceDisconnectedMessage,
+                    deviceDisconnectedNotification,
+                    deviceDisconnectedNotification);
                 notifyListeners();
               }
             });
@@ -80,6 +96,7 @@ class Bluetooth with ChangeNotifier {
         for (BluetoothCharacteristic c in characteristics) {
           if (c.uuid.toString() == txUUID) {
             txCharacteristic = c;
+            sendInitPacket();
           }
           if (c.uuid.toString() == rxUUID) {
             rxCharacteristic = c;
@@ -110,8 +127,18 @@ class Bluetooth with ChangeNotifier {
       );
       return false;
     }
-    List<int> packet = buildPacket(conversation.networkId, user.nodeId, 1, message: message.message);
+    List<int> packet = buildPacket(conversation.networkId, user.nodeId, 1,
+        message: message.message);
     txCharacteristic.write([...packet]);
     return true;
+  }
+
+  void sendInitPacket() async {
+    print(_conversation);
+    print(_currentUser);
+    if (_conversation != null && _currentUser != null) {
+      List<int> packet = buildPacket(_conversation.networkId, _currentUser.nodeId, 0);
+      txCharacteristic.write([...packet]);
+    }
   }
 }
