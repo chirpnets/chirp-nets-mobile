@@ -33,6 +33,10 @@ class Bluetooth with ChangeNotifier {
     notifyListeners();
   }
 
+  Conversation get conversation {
+    return _conversation;
+  } 
+
   set currentUser(User user) {
     _currentUser = user;
     notifyListeners();
@@ -134,9 +138,11 @@ class Bluetooth with ChangeNotifier {
   }
 
   void sendInitPacket() async {
+    print(_conversation);
     if (_conversation != null && _currentUser != null) {
       List<int> packet = buildPacket(_conversation.networkId, _currentUser.nodeId, 0);
       txCharacteristic.write([...packet]);
+      print(packet);
     }
   }
 }

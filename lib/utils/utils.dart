@@ -50,7 +50,7 @@ String parseMessage(List<int> message) {
 
 List<int> buildPacket(int networkId, int nodeId, int type,
     {String message}) {
-  List<int> encoded;
+  List<int> encoded = [];
   if (message != null) {
     encoded = new List<int>.from(AsciiEncoder().convert(message));
   }

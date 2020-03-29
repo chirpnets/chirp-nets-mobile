@@ -65,6 +65,10 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
     }
     User user = userData.currentUser;
     final Conversations conversationData = Provider.of<Conversations>(context);
+    if (bluetooth.conversation == null) {
+      var convs = conversationData.conversations.values.toList();
+      bluetooth.conversation = convs.length > 0 ? convs[0] : null;
+    }
     Map<int, Conversation> conversations = conversationData.conversations;
     return Scaffold(
       resizeToAvoidBottomInset: true,
