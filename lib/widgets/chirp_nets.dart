@@ -1,4 +1,3 @@
-import 'package:chirp_nets/models/conversation.dart';
 import 'package:chirp_nets/providers/bluetooth.dart';
 import 'package:chirp_nets/providers/users.dart';
 import 'package:chirp_nets/screens/bluetooth_screen.dart';

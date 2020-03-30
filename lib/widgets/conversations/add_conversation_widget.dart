@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:chirp_nets/models/conversation.dart';
 import 'package:chirp_nets/models/user.dart';
 import 'package:chirp_nets/providers/conversations.dart';
-import 'package:provider/provider.dart';
 
 class AddConversationWidget extends StatefulWidget {
   final Conversations conversationData;

@@ -43,3 +43,11 @@ const String bluetoothTitle = 'Bluetooth Devices';
 const String messageSentBy = 'You';
 
 const String errorSendingMessageText = 'Bluetooth device not connected. Please connect device and try again.';
+
+const String addNewUserNamePrompt = 'Enter a name for this user';
+
+const String newUserNameHint = 'Enter a name...';
+
+const String nameError = 'Name cannot be blank!';
+
+const String ok = 'Ok';

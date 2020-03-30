@@ -121,10 +121,10 @@ class Users with ChangeNotifier {
     return user;
   }
 
-  Future<User> getOrCreate({String name, int nodeId}) async {
-    User user = _users.values.firstWhere((user) => user.name == name, orElse: () => User(name: name));
+  Future<User> getOrCreate({String name='', int nodeId}) async {
+    User user = _users.values.firstWhere((user) => user.name == name || user.nodeId == nodeId, orElse: () => User(name: name));
     if (user.id == null) {
-      int id = await addUser(name:name, nodeId:nodeId);
+      int id = await addUser(name: name, nodeId: nodeId);
       return getUser(id: id);
     }
     return user;

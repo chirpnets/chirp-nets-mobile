@@ -113,7 +113,7 @@ class Messages with ChangeNotifier {
     int conversationId = int.parse(ascii.decode([listMessage[1]])[0]);
     List<int> recievedMessage = listMessage.sublist(4, listMessage.length);
     String parsedMessage = parseMessage(recievedMessage);
-    User user = await users.getOrCreate(name: 'Becky', nodeId: nodeId);
+    User user = await users.getOrCreate(nodeId: nodeId);
     if (parsedMessage != null) {
       addMessage(user.id, conversationId, parsedMessage, DateTime.now());
       showNotification(0, '${user.name}', '$parsedMessage', '$parsedMessage');
