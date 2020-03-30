@@ -38,7 +38,7 @@ class MessageInputWidget extends StatelessWidget {
       conversationId: conversationId,
       sentBy: user.id,
     );
-    bool success = bluetooth.sendMessage(messageObject);
+    bool success = bluetooth.sendMessage(messageObject, conversation, user);
     if (success) {
       messageProvider.addMessage(
         messageObject.sentBy,

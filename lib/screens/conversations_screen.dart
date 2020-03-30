@@ -31,7 +31,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
     setupNotifications();
   }
 
-  void getBottomSheet(context, conversationData) {
+  void getBottomSheet(context, conversationData, bluetooth) {
     User user = userData.currentUser;
     showModalBottomSheet(
       context: context,
@@ -49,6 +49,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
               : AddConversationWidget(
                   conversationData: conversationData,
                   user: user,
+                  bluetooth: bluetooth,
                 ),
         ),
       ),
@@ -64,6 +65,10 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
     }
     User user = userData.currentUser;
     final Conversations conversationData = Provider.of<Conversations>(context);
+    if (bluetooth.conversation == null) {
+      var convs = conversationData.conversations.values.toList();
+      bluetooth.conversation = convs.length > 0 ? convs[0] : null;
+    }
     Map<int, Conversation> conversations = conversationData.conversations;
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -112,7 +117,7 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
           color: Theme.of(context).highlightColor,
         ),
         tooltip: 'Add Conversation',
-        onPressed: () => getBottomSheet(context, conversationData),
+        onPressed: () => getBottomSheet(context, conversationData, bluetooth),
       ),
     );
   }

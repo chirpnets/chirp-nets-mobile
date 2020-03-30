@@ -1,8 +1,10 @@
+import 'package:chirp_nets/providers/bluetooth.dart';
 import 'package:chirp_nets/utils/text.dart';
 import 'package:flutter/material.dart';
 
 import 'package:chirp_nets/providers/conversations.dart';
 import 'package:chirp_nets/providers/users.dart';
+import 'package:provider/provider.dart';
 
 class AddFirstUserWidget extends StatelessWidget {
   void createUserAndConversation(
@@ -13,9 +15,15 @@ class AddFirstUserWidget extends StatelessWidget {
       Conversations conversations,
       BuildContext ctx) async {
     if (name.isNotEmpty && conversationName.isNotEmpty && nodeId != null) {
+      Bluetooth bluetooth = Provider.of<Bluetooth>(ctx);
       int id = users.currentUser.id;
-      users.updateUser(id, name:name, nodeId:nodeId);
-      conversations.addConversation(id, conversationName, 1);
+      users.updateUser(id, name: name, nodeId: nodeId);
+      conversations.addConversation(id, conversationName, 1).then((id) {
+        bluetooth.currentUser = users.currentUser;
+        bluetooth.conversation = conversations.conversations[id];
+        bluetooth.sendInitPacket();
+      });
+
       Navigator.of(ctx).pop();
     }
   }

@@ -1,4 +1,6 @@
+import 'package:chirp_nets/models/conversation.dart';
 import 'package:chirp_nets/models/message.dart';
+import 'package:chirp_nets/models/user.dart';
 import 'package:chirp_nets/providers/messages.dart';
 import 'package:chirp_nets/utils/notifications.dart';
 import 'package:chirp_nets/utils/text.dart';
@@ -9,6 +11,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 class Bluetooth with ChangeNotifier {
   BluetoothDevice _device;
+  User _currentUser;
+  Conversation _conversation;
   FlutterBlue _flutterBlue = FlutterBlue.instance;
   BluetoothCharacteristic txCharacteristic;
   BluetoothCharacteristic rxCharacteristic;
@@ -22,6 +26,20 @@ class Bluetooth with ChangeNotifier {
 
   BluetoothDevice get device {
     return _device;
+  }
+
+  set conversation(Conversation conv) {
+    _conversation = conv;
+    notifyListeners();
+  }
+
+  Conversation get conversation {
+    return _conversation;
+  } 
+
+  set currentUser(User user) {
+    _currentUser = user;
+    notifyListeners();
   }
 
   Future<void> findDevices() async {
@@ -44,7 +62,11 @@ class Bluetooth with ChangeNotifier {
             _device.state.listen((state) {
               if (state == BluetoothDeviceState.disconnected) {
                 _device = null;
-                showNotification(3, deviceDisconnectedMessage, deviceDisconnectedNotification, deviceDisconnectedNotification);
+                showNotification(
+                    3,
+                    deviceDisconnectedMessage,
+                    deviceDisconnectedNotification,
+                    deviceDisconnectedNotification);
                 notifyListeners();
               }
             });
@@ -78,6 +100,7 @@ class Bluetooth with ChangeNotifier {
         for (BluetoothCharacteristic c in characteristics) {
           if (c.uuid.toString() == txUUID) {
             txCharacteristic = c;
+            sendInitPacket();
           }
           if (c.uuid.toString() == rxUUID) {
             rxCharacteristic = c;
@@ -101,15 +124,23 @@ class Bluetooth with ChangeNotifier {
     notifyListeners();
   }
 
-  bool sendMessage(Message message) {
+  bool sendMessage(Message message, Conversation conversation, User user) {
     if (txCharacteristic == null) {
       Fluttertoast.showToast(
         msg: errorSendingMessageText,
       );
       return false;
     }
-    List<int> encoded = new List<int>.from(encodeMessage(message.message));
-    txCharacteristic.write([...encoded]);
+    List<int> packet = buildPacket(conversation.networkId, user.nodeId, 1,
+        message: message.message);
+    txCharacteristic.write([...packet]);
     return true;
+  }
+
+  void sendInitPacket() async {
+    if (_conversation != null && _currentUser != null) {
+      List<int> packet = buildPacket(_conversation.networkId, _currentUser.nodeId, 2);
+      txCharacteristic.write([...packet]);
+    }
   }
 }

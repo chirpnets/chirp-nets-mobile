@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:chirp_nets/utils/database.dart';
 import 'package:chirp_nets/utils/utils.dart';
 import 'users.dart';
+import 'dart:convert';
 
 class Messages with ChangeNotifier {
   Messages() {
@@ -105,17 +106,16 @@ class Messages with ChangeNotifier {
   }
 
   void recieveMessage(List<int> listMessage) async {
-    List<int> recievedMessage = listMessage.sublist(0, listMessage.length - 1);
-    // int checksum = listMessage.last;
-    // if (!validateChecksum(checksum, recievedMessage)) {
-    //   debugPrint('Checksum incorrect');
-    // }
-    // Here we should check the nodeId in the packet and set accordingly
-    User user = await users.getOrCreate(name: 'Becky', nodeId: 1);
+    if (listMessage.length < 4) {
+      return;
+    }
+    int nodeId = int.parse(ascii.decode([listMessage[2]])[0] + ascii.decode([listMessage[3]])[0]);
+    int conversationId = int.parse(ascii.decode([listMessage[1]])[0]);
+    List<int> recievedMessage = listMessage.sublist(4, listMessage.length);
     String parsedMessage = parseMessage(recievedMessage);
-    print(parsedMessage);
-    if (parsedMessage != '') {
-      addMessage(user.id, 1, parsedMessage, DateTime.now());
+    User user = await users.getOrCreate(name: 'Becky', nodeId: nodeId);
+    if (parsedMessage != null) {
+      addMessage(user.id, conversationId, parsedMessage, DateTime.now());
       showNotification(0, '${user.name}', '$parsedMessage', '$parsedMessage');
     }
   }

@@ -86,7 +86,7 @@ class Users with ChangeNotifier {
   }
 
   void updateLocation({int id, double latitude, double longitude}) {
-    User user = _users.update(
+    _users.update(
       id,
       (oldUser) => User(
         id: oldUser.id,
@@ -97,7 +97,6 @@ class Users with ChangeNotifier {
         longitude: longitude.toString(),
       ),
     );
-    update(table: 'users', object: user);
     notifyListeners();
   }
 
