@@ -1,3 +1,4 @@
+import 'package:chirp_nets/providers/bluetooth.dart';
 import 'package:chirp_nets/utils/text.dart';
 import 'package:chirp_nets/widgets/common/delete_alert_dialog.dart';
 import 'package:flutter/material.dart';
@@ -10,8 +11,9 @@ class AddConversationWidget extends StatefulWidget {
   final Conversations conversationData;
   final User user;
   final Conversation conversation;
+  final Bluetooth bluetooth;
 
-  AddConversationWidget({this.conversationData, this.user, this.conversation});
+  AddConversationWidget({this.conversationData, this.user, this.conversation, this.bluetooth});
 
   @override
   AddConversationWidgetState createState() {
@@ -23,8 +25,8 @@ class AddConversationWidgetState extends State<AddConversationWidget> {
   final _formKey = GlobalKey<FormState>();
   final Map<String, dynamic> formData = {'name': null, 'networkId': null};
 
-  void addConversation(
-      Conversations conversationData, User user, String name, int networkId, ctx) {
+  void addConversation(Conversations conversationData, User user, String name,
+      int networkId, BuildContext ctx) {
     if (name.isEmpty || networkId == null) {
       return;
     }
@@ -40,6 +42,8 @@ class AddConversationWidgetState extends State<AddConversationWidget> {
         name: name,
         networkId: networkId,
       );
+      widget.bluetooth.conversation = conv;
+      widget.bluetooth.sendInitPacket();
       conversationData.addConversation(
         conv.userId,
         conv.name,
@@ -79,72 +83,70 @@ class AddConversationWidgetState extends State<AddConversationWidget> {
   @override
   Widget build(BuildContext context) {
     return Form(
-      key:_formKey,
-      child:Container(
-      height: MediaQuery.of(context).size.height/3.5,
-      child: Card(
-        color: Theme.of(context).accentColor,
+        key: _formKey,
         child: Container(
-          padding: EdgeInsets.all(10),
-          child: Column(
-            children: [
-              TextFormField(
-                autofocus: true,
-                style: Theme.of(context).textTheme.body1,
-                textCapitalization: TextCapitalization.words,
-                decoration: InputDecoration(
-                  hintStyle: Theme.of(context).textTheme.body1,
-                  hasFloatingPlaceholder: true,
-                  hintText: groupPrompt,
-                ),
-                onSaved: (String value) {
-                  formData['name'] = value;
-                },
-
-              ),
-              TextFormField(
-                autofocus: false,
-                style: Theme.of(context).textTheme.body1,
-                textCapitalization: TextCapitalization.words,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  hintStyle: Theme.of(context).textTheme.body1,
-                  hasFloatingPlaceholder: true,
-                  hintText: networkPrompt,
-                ),
-                onSaved: (String value) {
-                  formData['networkId'] = value;
-                },
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 10),
-                child: RaisedButton(
-                  onPressed: () => {
-                    submitForm(context)
-                  },
-                  color: Theme.of(context).accentColor,
-                  child: Icon(
-                    Icons.add_comment,
-                    color: Theme.of(context).highlightColor,
-                  ),
-                ),
-              ),
-              if (widget.conversation != null)
-                Container(
-                  child: RaisedButton(
-                    child: Icon(
-                      Icons.delete_forever,
-                      color: Theme.of(context).errorColor,
+          height: MediaQuery.of(context).size.height / 3.5,
+          child: Card(
+            color: Theme.of(context).accentColor,
+            child: Container(
+              padding: EdgeInsets.all(10),
+              child: Column(
+                children: [
+                  TextFormField(
+                    autofocus: true,
+                    style: Theme.of(context).textTheme.body1,
+                    textCapitalization: TextCapitalization.words,
+                    decoration: InputDecoration(
+                      hintStyle: Theme.of(context).textTheme.body1,
+                      hasFloatingPlaceholder: true,
+                      hintText: groupPrompt,
                     ),
-                    onPressed: () => this.deleteConversation(
-                       widget. conversation, widget.conversationData, context),
+                    onSaved: (String value) {
+                      formData['name'] = value;
+                    },
                   ),
-                )
-            ],
+                  TextFormField(
+                    autofocus: false,
+                    style: Theme.of(context).textTheme.body1,
+                    textCapitalization: TextCapitalization.words,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      hintStyle: Theme.of(context).textTheme.body1,
+                      hasFloatingPlaceholder: true,
+                      hintText: networkPrompt,
+                    ),
+                    onSaved: (String value) {
+                      formData['networkId'] = value;
+                    },
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 10),
+                    child: RaisedButton(
+                      onPressed: () => {submitForm(context)},
+                      color: Theme.of(context).accentColor,
+                      child: Icon(
+                        Icons.add_comment,
+                        color: Theme.of(context).highlightColor,
+                      ),
+                    ),
+                  ),
+                  if (widget.conversation != null)
+                    Container(
+                      child: RaisedButton(
+                        child: Icon(
+                          Icons.delete_forever,
+                          color: Theme.of(context).errorColor,
+                        ),
+                        onPressed: () => this.deleteConversation(
+                            widget.conversation,
+                            widget.conversationData,
+                            context),
+                      ),
+                    )
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
-    )
-    );
+        ));
   }
 }

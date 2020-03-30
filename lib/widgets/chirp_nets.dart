@@ -50,9 +50,10 @@ class _ChirpNetsState extends State<ChirpNets> {
   Widget build(BuildContext context) {
     Conversations conversationProvider = Conversations();
     Messages messageProvider = Messages();
-    bluetooth.messageProvider = messageProvider;
     Users userProvider = Users();
     messageProvider.users = userProvider;
+    bluetooth.messageProvider = messageProvider;
+    bluetooth.currentUser = userProvider.currentUser;
     return Background(
       child: MaterialApp(
         title: 'Chirp Nets',
@@ -93,6 +94,9 @@ class _ChirpNetsState extends State<ChirpNets> {
                 providers: [
                   ChangeNotifierProvider.value(
                     value: userProvider,
+                  ),
+                  ChangeNotifierProvider.value(
+                    value: bluetooth,
                   ),
                 ],
                 child: SettingsScreen(),

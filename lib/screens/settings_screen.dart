@@ -1,4 +1,5 @@
 import 'package:chirp_nets/models/user.dart';
+import 'package:chirp_nets/providers/bluetooth.dart';
 import 'package:chirp_nets/providers/users.dart';
 import 'package:chirp_nets/utils/text.dart';
 import 'package:chirp_nets/widgets/settings/setting_widget.dart';
@@ -29,6 +30,9 @@ class SettingsScreen extends StatelessWidget {
 
   void editNodeId(String value, Users userData, User currentUser, ctx) {
     editUser(userData, currentUser, ctx, nodeId: int.parse(value));
+    Bluetooth bluetooth = Provider.of<Bluetooth>(ctx);
+    bluetooth.currentUser = userData.currentUser;
+    bluetooth.sendInitPacket(); 
   }
 
   @override
