@@ -138,11 +138,9 @@ class Bluetooth with ChangeNotifier {
   }
 
   void sendInitPacket() async {
-    print(_conversation);
     if (_conversation != null && _currentUser != null) {
-      List<int> packet = buildPacket(_conversation.networkId, _currentUser.nodeId, 0);
+      List<int> packet = buildPacket(_conversation.networkId, _currentUser.nodeId, 2);
       txCharacteristic.write([...packet]);
-      print(packet);
     }
   }
 }

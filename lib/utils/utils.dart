@@ -43,9 +43,7 @@ String getTimeSinceMessage(DateTime time) {
 }
 
 String parseMessage(List<int> message) {
-  int index = message.indexOf(0);
-  List<int> recievedMessage = message.sublist(0, index);
-  return AsciiDecoder().convert(recievedMessage);
+  return AsciiDecoder().convert(message);
 }
 
 List<int> buildPacket(int networkId, int nodeId, int type,
@@ -55,14 +53,14 @@ List<int> buildPacket(int networkId, int nodeId, int type,
     encoded = new List<int>.from(AsciiEncoder().convert(message));
   }
   if (nodeId < 10) {
-    encoded.insert(0, nodeId);
-    encoded.insert(0, 0);
+    encoded.insert(0, ascii.encode(nodeId.toString())[0]);
+    encoded.insert(0, ascii.encode(0.toString())[0]);
   } else {
-    encoded.insert(0, int.parse(nodeId.toString()[1]));
-    encoded.insert(0, int.parse(nodeId.toString()[0]));
+    encoded.insert(0, ascii.encode(nodeId.toString())[1]);
+    encoded.insert(0, ascii.encode(nodeId.toString())[0]);
   }
-  encoded.insert(0, networkId);
-  encoded.insert(0, type);
+  encoded.insert(0, ascii.encode(networkId.toString())[0]);
+  encoded.insert(0, ascii.encode(type.toString())[0]);
   return encoded;
 }
 

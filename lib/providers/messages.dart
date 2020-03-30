@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:chirp_nets/utils/database.dart';
 import 'package:chirp_nets/utils/utils.dart';
 import 'users.dart';
+import 'dart:convert';
 
 class Messages with ChangeNotifier {
   Messages() {
@@ -108,8 +109,8 @@ class Messages with ChangeNotifier {
     if (listMessage.length < 4) {
       return;
     }
-    int nodeId = int.parse(listMessage[2].toString() + listMessage[3].toString());
-    int conversationId = listMessage[1];
+    int nodeId = int.parse(ascii.decode([listMessage[2]])[0] + ascii.decode([listMessage[3]])[0]);
+    int conversationId = int.parse(ascii.decode([listMessage[1]])[0]);
     List<int> recievedMessage = listMessage.sublist(4, listMessage.length);
     String parsedMessage = parseMessage(recievedMessage);
     User user = await users.getOrCreate(name: 'Becky', nodeId: nodeId);
