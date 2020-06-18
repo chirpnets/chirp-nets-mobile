@@ -6,7 +6,7 @@ import 'package:chirp_nets/utils/notifications.dart';
 import 'package:chirp_nets/utils/text.dart';
 import 'package:chirp_nets/widgets/conversations/add_conversation_widget.dart';
 import 'package:chirp_nets/widgets/conversations/conversations_list_widget.dart';
-import 'package:chirp_nets/widgets/users/add_first_user_widget.dart';
+import 'package:chirp_nets/widgets/users/add_nodeId_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
@@ -24,6 +24,8 @@ class ConversationsScreen extends StatefulWidget {
 class _ConversationsScreenState extends State<ConversationsScreen> {
   Users userData;
   LocationService service;
+  TextEditingController _textFieldController = TextEditingController();
+
 
   @override
   void initState() {
@@ -31,8 +33,25 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
     setupNotifications();
   }
 
-  void getBottomSheet(context, conversationData, bluetooth) {
+  openSetUserInfoDialog(BuildContext context, User user) async {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: SetUserInfoWidget(user:user, userData: userData),
+          );
+        });
+  }
+
+
+  void getBottomSheet(context, conversationData, bluetooth) async {
     User user = userData.currentUser;
+    if (user.name == '') {
+      await openSetUserInfoDialog(context, user);
+    }
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -41,16 +60,11 @@ class _ConversationsScreenState extends State<ConversationsScreen> {
           padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
-          child: user.name == ''
-              ? AddFirstUserWidget(
-                  userData: userData,
-                  conversationData: conversationData,
-                )
-              : AddConversationWidget(
-                  conversationData: conversationData,
-                  user: user,
-                  bluetooth: bluetooth,
-                ),
+          child: AddConversationWidget(
+            conversationData: conversationData,
+            user: user,
+            bluetooth: bluetooth,
+          ),
         ),
       ),
     );

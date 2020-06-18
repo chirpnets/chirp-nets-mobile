@@ -51,3 +51,7 @@ const String newUserNameHint = 'Enter a name...';
 const String nameError = 'Name cannot be blank!';
 
 const String ok = 'Ok';
+
+const String nameAndNodeIDPrompt = 'Please enter your name and node ID';
+
+const String nodeIDErrorMessage = 'NodeID cannot be blank!';
