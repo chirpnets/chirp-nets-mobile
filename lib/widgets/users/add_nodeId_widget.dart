@@ -23,7 +23,6 @@ class SetUserInfoWidgetState extends State<SetUserInfoWidget> {
       return;
     }
     widget.userData.updateUser(widget.user.id, name:name, nodeId:nodeId);
-    print(formData);
     Navigator.pop(ctx);
   }
 
@@ -54,7 +53,7 @@ class SetUserInfoWidgetState extends State<SetUserInfoWidget> {
               Align(
                 alignment: Alignment.center,
                 child: new Text(
-                  'Please enter your name and node ID',
+                  nameAndNodeIDPrompt,
                   style: TextStyle(
                     fontSize: 20
                   )
@@ -75,7 +74,7 @@ class SetUserInfoWidgetState extends State<SetUserInfoWidget> {
                 },
                 validator: (value) {
                 if (value.isEmpty) {
-                  return 'Name cannot be blank!';
+                  return nameError;
                 }
                 return null;
               },
@@ -95,7 +94,7 @@ class SetUserInfoWidgetState extends State<SetUserInfoWidget> {
                 },
                 validator: (value) {
                   if (value == null) {
-                    return 'NodeID cannot be blank!';
+                    return nodeIDErrorMessage;
                   }
                   return null;
                 },
